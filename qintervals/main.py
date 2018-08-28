@@ -19,7 +19,7 @@ class Ui(QtWidgets.QWidget):
 
         self.setWindowTitle("qintervals")
 
-        # Create grid for times
+        # Main grid layout
         self.grid_widget = QtWidgets.QWidget(self)
         self.grid_widget.setGeometry(QtCore.QRect(50, 50, 400, 400))
         self.grid_layout = QtWidgets.QGridLayout(self.grid_widget)
@@ -41,7 +41,7 @@ class Ui(QtWidgets.QWidget):
         self.label_interval_name = QtWidgets.QLabel(self.grid_widget)
         self.label_interval_name.setFont(self.font_interval_name)
         self.label_interval_name.setText(self.workout.intervals[0].text)
-        self.grid_layout.addWidget(self.label_interval_name, 1, 0, 1, -1, QtCore.Qt.AlignCenter)
+        self.grid_layout.addWidget(self.label_interval_name, 1, 0, 1, 2, QtCore.Qt.AlignCenter)
 
         # Interval remaining label
         self.label_interval_remaining = QtWidgets.QLabel(self.grid_widget)
@@ -60,6 +60,28 @@ class Ui(QtWidgets.QWidget):
         self.label_total_remaining_time = QtWidgets.QLabel(self.grid_widget)
         self.label_total_remaining_time.setText(self.time_str(0))
         self.grid_layout.addWidget(self.label_total_remaining_time, 3, 1, QtCore.Qt.AlignCenter)
+
+        # Grid layout for upcoming intervals
+        self.vbox_upcoming = QtWidgets.QVBoxLayout()
+        self.grid_layout.addLayout(self.vbox_upcoming, 1, 2, 2, 1, QtCore.Qt.AlignCenter)
+
+        # Upcoming intervals header
+        self.font_upcoming_header = QtGui.QFont()
+        self.font_upcoming_header.setPointSize(14)
+        self.font_upcoming_header.setWeight(QtGui.QFont.Bold)
+        self.label_upcoming = QtWidgets.QLabel(self.grid_widget)
+        self.label_upcoming.setFont(self.font_upcoming_header)
+        self.label_upcoming.setText("Upcoming")
+        self.vbox_upcoming.addWidget(self.label_upcoming, QtCore.Qt.AlignCenter)
+
+        # Upcoming interval labels
+        self.font_upcoming_interval = QtGui.QFont()
+        self.font_upcoming_interval.setPointSize(14)
+        self.font_upcoming_interval.setWeight(QtGui.QFont.Normal)
+        self.label_upcoming_intervals = [QtWidgets.QLabel() for i in range(5)]
+        for label in self.label_upcoming_intervals:
+            label.setFont(self.font_upcoming_interval)
+            self.vbox_upcoming.addWidget(label, QtCore.Qt.AlignCenter)
 
         # Initialise timer
         self.timer = QtCore.QTimer()
@@ -82,6 +104,17 @@ class Ui(QtWidgets.QWidget):
 
         # Write current interval name
         self.label_interval_name.setText(self.interval.text)
+
+        # Write upcoming interval names
+        self.write_upcoming_intervals()
+
+    # Write the names of upcoming intervals to the upcoming vbox layout
+    def write_upcoming_intervals(self):
+        # Write hearder
+        upcoming = self.workout.upcoming()
+
+        for i,interval in enumerate(upcoming[:5]):
+            self.label_upcoming_intervals[i].setText(interval.text)
 
     # Format a time in seconds for output
     def time_str(self,time):
