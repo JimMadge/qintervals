@@ -26,27 +26,40 @@ class Ui(QtWidgets.QWidget):
         self.grid_layout.setContentsMargins(0, 0, 0, 0)
 
         # Workout name
+        self.font_workout_name = QtGui.QFont()
+        self.font_workout_name.setPointSize(20)
+        self.font_workout_name.setWeight(QtGui.QFont.Bold)
         self.label_workout_name = QtWidgets.QLabel(self.grid_widget)
+        self.label_workout_name.setFont(self.font_workout_name)
         self.label_workout_name.setText(self.workout.name)
         self.grid_layout.addWidget(self.label_workout_name, 0, 0, 1, -1, QtCore.Qt.AlignCenter)
+
+        # Interval name
+        self.font_interval_name = QtGui.QFont()
+        self.font_interval_name.setPointSize(16)
+        self.font_interval_name.setWeight(QtGui.QFont.Bold)
+        self.label_interval_name = QtWidgets.QLabel(self.grid_widget)
+        self.label_interval_name.setFont(self.font_interval_name)
+        self.label_interval_name.setText(self.workout.intervals[0].text)
+        self.grid_layout.addWidget(self.label_interval_name, 1, 0, 1, -1, QtCore.Qt.AlignCenter)
 
         # Interval remaining label
         self.label_interval_remaining = QtWidgets.QLabel(self.grid_widget)
         self.label_interval_remaining.setText("Interval Remaining")
-        self.grid_layout.addWidget(self.label_interval_remaining, 1, 0, QtCore.Qt.AlignCenter)
+        self.grid_layout.addWidget(self.label_interval_remaining, 2, 0, QtCore.Qt.AlignCenter)
         # Interval remaining time
         self.label_interval_remaining_time = QtWidgets.QLabel(self.grid_widget)
         self.label_interval_remaining_time.setText(self.time_str(0))
-        self.grid_layout.addWidget(self.label_interval_remaining_time, 1, 1, QtCore.Qt.AlignCenter)
+        self.grid_layout.addWidget(self.label_interval_remaining_time, 2, 1, QtCore.Qt.AlignCenter)
 
         # Total remaining label
         self.label_total_remaining = QtWidgets.QLabel(self.grid_widget)
         self.label_total_remaining.setText("Total Remaining")
-        self.grid_layout.addWidget(self.label_total_remaining, 2, 0, QtCore.Qt.AlignCenter)
+        self.grid_layout.addWidget(self.label_total_remaining, 3, 0, QtCore.Qt.AlignCenter)
         # Total remaining time
         self.label_total_remaining_time = QtWidgets.QLabel(self.grid_widget)
         self.label_total_remaining_time.setText(self.time_str(0))
-        self.grid_layout.addWidget(self.label_total_remaining_time, 2, 1, QtCore.Qt.AlignCenter)
+        self.grid_layout.addWidget(self.label_total_remaining_time, 3, 1, QtCore.Qt.AlignCenter)
 
         # Initialise timer
         self.timer = QtCore.QTimer()
@@ -61,9 +74,14 @@ class Ui(QtWidgets.QWidget):
 
     # Redraw dynamic elements of the ui
     def redraw(self):
+        # Obtain current time elapsed and remaining, and current interval
         self.elapsed, self.remaining, self.interval_elapsed, self.interval_remaining, self.interval = self.workout.progress()
+        # Write current times
         self.label_interval_remaining_time.setText(self.time_str(self.interval_remaining))
         self.label_total_remaining_time.setText(self.time_str(self.remaining))
+
+        # Write current interval name
+        self.label_interval_name.setText(self.interval.text)
 
     # Format a time in seconds for output
     def time_str(self,time):
