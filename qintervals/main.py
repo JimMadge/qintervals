@@ -4,6 +4,7 @@ import sys
 
 _WIDTH = 500
 _HEIGHT = 500
+_UPCOMING_INTERVALS_DISPLAYED = 8
 
 class Ui(QtWidgets.QWidget):
     def __init__(self, workout):
@@ -95,7 +96,7 @@ class Ui(QtWidgets.QWidget):
         self.vbox_upcoming.addWidget(self.label_upcoming, QtCore.Qt.AlignCenter)
 
         # Upcoming interval labels
-        self.label_upcoming_intervals = [QtWidgets.QLabel() for i in range(5)]
+        self.label_upcoming_intervals = [QtWidgets.QLabel() for i in range(_UPCOMING_INTERVALS_DISPLAYED)]
         for label in self.label_upcoming_intervals:
             self.vbox_upcoming.addWidget(label, QtCore.Qt.AlignCenter)
 
@@ -129,7 +130,7 @@ class Ui(QtWidgets.QWidget):
         # Write hearder
         upcoming = self.workout.upcoming()
 
-        for i,interval in enumerate(upcoming[:5]):
+        for i,interval in enumerate(upcoming[:_UPCOMING_INTERVALS_DISPLAYED]):
             self.label_upcoming_intervals[i].setText(interval.text)
 
     # Format a time in seconds for output
