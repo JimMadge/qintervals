@@ -87,7 +87,7 @@ class Ui(QtWidgets.QWidget):
 
         # Grid layout for upcoming intervals
         self.vbox_upcoming = QtWidgets.QVBoxLayout()
-        self.grid_layout.addLayout(self.vbox_upcoming, 1, 2, 2, 1, QtCore.Qt.AlignCenter)
+        self.grid_layout.addLayout(self.vbox_upcoming, 1, 2, 3, 1, QtCore.Qt.AlignCenter)
 
         # Upcoming intervals header
         self.label_upcoming = QtWidgets.QLabel(self.grid_widget)
