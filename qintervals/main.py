@@ -32,13 +32,10 @@ class Ui(QtWidgets.QWidget):
         # Time digits font
         self.font_time = QtGui.QFont()
         self.font_time.setPointSize(14)
-        #self.font_time.setStyleHint(QtGui.QFont.TypeWriter)
         self.font_time.setStyleHint(QtGui.QFont.Monospace)
 
         # Upcoming intervals header font
-        self.font_upcoming_header = QtGui.QFont()
-        self.font_upcoming_header.setPointSize(14)
-        self.font_upcoming_header.setWeight(QtGui.QFont.Bold)
+        self.font_upcoming_header = self.font_interval_name
 
     # Initialise the ui
     def init_ui(self,workout):
