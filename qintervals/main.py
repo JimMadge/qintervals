@@ -144,7 +144,7 @@ class Ui(QtWidgets.QWidget):
     # Format a time in seconds for output
     def time_str(self,time):
         minutes, seconds = divmod(time, 60)
-        string = "{:2d}:{:02.2f}".format(int(minutes), seconds)
+        string = "{:2d}:{:05.2f}".format(int(minutes), seconds)
         return string
 
 if __name__ == "__main__":
