@@ -39,13 +39,13 @@ class Workout(object):
         remaining = self.total_time - elapsed
 
         # Determine current interval
-        self.update_current_interval(elapsed)
+        changed_interval = self.update_current_interval(elapsed)
         interval = self.intervals[self.current_interval]
 
         interval_elapsed = elapsed - self.cum_times[self.current_interval]
         interval_remaining = interval.length - interval_elapsed
 
-        return elapsed, remaining, interval_elapsed, interval_remaining, interval
+        return elapsed, remaining, interval_elapsed, interval_remaining, interval, changed_interval
 
     def upcoming(self):
         elapsed = time() - self.start_time
@@ -53,10 +53,15 @@ class Workout(object):
         return  self.intervals[self.current_interval+1:]
 
     def update_current_interval(self,elapsed):
+        old_interval = self.current_interval
         for i,time in enumerate(self.cum_times):
             if elapsed < time:
                 self.current_interval = i-1
                 break
+        if self.current_interval == old_interval:
+            return False
+        else:
+            return True
 
 # Interval class
 class Interval(object):

@@ -1,5 +1,5 @@
 from interval import Workout
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets, QtMultimedia
 import sys
 
 _WIDTH = 500
@@ -100,6 +100,9 @@ class Ui(QtWidgets.QWidget):
         for label in self.label_upcoming_intervals:
             self.vbox_upcoming.addWidget(label, QtCore.Qt.AlignCenter)
 
+        # Sound for changing interval
+        self.bell = QtMultimedia.QSound('./tone.wav')
+
         # Initialise timer
         self.timer = QtCore.QTimer()
         self.timer.setInterval(100)
@@ -114,7 +117,8 @@ class Ui(QtWidgets.QWidget):
     # Redraw dynamic elements of the ui
     def redraw(self):
         # Obtain current time elapsed and remaining, and current interval
-        self.elapsed, self.remaining, self.interval_elapsed, self.interval_remaining, self.interval = self.workout.progress()
+        self.elapsed, self.remaining, self.interval_elapsed, self.interval_remaining, self.interval, changed_interval = self.workout.progress()
+
         # Write current times
         self.label_interval_remaining_time.setText(self.time_str(self.interval_remaining))
         self.label_total_remaining_time.setText(self.time_str(self.remaining))
@@ -124,6 +128,10 @@ class Ui(QtWidgets.QWidget):
 
         # Write upcoming interval names
         self.write_upcoming_intervals()
+
+        # Play sound if interval has changed
+        if changed_interval:
+            self.bell.play()
 
     # Write the names of upcoming intervals to the upcoming vbox layout
     def write_upcoming_intervals(self):
