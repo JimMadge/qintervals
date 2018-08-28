@@ -8,6 +8,7 @@ class Workout(object):
         self.intervals = []
         self.cum_times = [0]
         self.total_time = 0
+        self.current_interval = 0
 
     def from_yaml(self, yaml_file):
         # Parse yaml file as a dictionary
@@ -38,22 +39,24 @@ class Workout(object):
         remaining = self.total_time - elapsed
 
         # Determine current interval
-        for i in range(len(self.intervals)):
-            if elapsed > self.cum_times[i]:
-                current = i
-        interval = self.intervals[current]
+        self.update_current_interval(elapsed)
+        interval = self.intervals[self.current_interval]
 
-        interval_elapsed = elapsed - self.cum_times[current]
+        interval_elapsed = elapsed - self.cum_times[self.current_interval]
         interval_remaining = interval.length - interval_elapsed
 
         return elapsed, remaining, interval_elapsed, interval_remaining, interval
 
     def upcoming(self):
         elapsed = time() - self.start_time
-        for i in range(len(self.intervals)):
-            if elapsed > self.cum_times[i]:
-                current = i
-        return  self.intervals[current+1:]
+        self.update_current_interval(elapsed)
+        return  self.intervals[self.current_interval+1:]
+
+    def update_current_interval(self,elapsed):
+        for i,time in enumerate(self.cum_times):
+            if elapsed < time:
+                self.current_interval = i-1
+                break
 
 # Interval class
 class Interval(object):
