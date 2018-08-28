@@ -105,7 +105,7 @@ class Ui(QtWidgets.QWidget):
 
         # Initialise timer
         self.timer = QtCore.QTimer()
-        self.timer.setInterval(100)
+        self.timer.setInterval(50)
         self.timer.timeout.connect(self.redraw)
         self.timer.start()
 
@@ -144,7 +144,7 @@ class Ui(QtWidgets.QWidget):
     # Format a time in seconds for output
     def time_str(self,time):
         minutes, seconds = divmod(time, 60)
-        string = "{:2d}:{:05.2f}".format(int(minutes), seconds)
+        string = "{:2d}:{:04.1f}".format(int(minutes), seconds)
         return string
 
 if __name__ == "__main__":
