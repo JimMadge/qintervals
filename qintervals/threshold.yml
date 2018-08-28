@@ -1,0 +1,94 @@
+title: Threshold
+intervals:
+- type: warmup
+  name: Warm up
+  length: 10m
+
+- type: work
+  name: Zone 3
+  length: 10m
+
+- type: rest
+  name: Rest
+  length: 5m
+
+- type: work
+  name: Zone 4, low
+  length: 5m
+- type: rest
+  name: Rest
+  length: 60s
+- type: work
+  name: Zone 4, low
+  length: 5m
+- type: rest
+  name: Rest
+  length: 60s
+
+- type: rest
+  name: Rest
+  length: 5m
+
+- type: work
+  name: Zone 4, high
+  length: 2m
+- type: rest
+  name: Rest
+  length: 30s
+- type: work
+  name: Zone 4, high
+  length: 2m
+- type: rest
+  name: Rest
+  length: 30s
+- type: work
+  name: Zone 4, high
+  length: 2m
+- type: rest
+  name: Rest
+  length: 30s
+
+- type: rest
+  name: Rest
+  length: 5m
+
+- type: work
+  name: Zone 5
+  length: 1m
+- type: rest
+  name: Rest
+  length: 30s
+- type: work
+  name: Zone 5
+  length: 1m
+- type: rest
+  name: Rest
+  length: 30s
+- type: work
+  name: Zone 5
+  length: 1m
+- type: rest
+  name: Rest
+  length: 30s
+- type: work
+  name: Zone 5
+  length: 1m
+- type: rest
+  name: Rest
+  length: 30s
+- type: work
+  name: Zone 5
+  length: 1m
+- type: rest
+  name: Rest
+  length: 30s
+- type: work
+  name: Zone 5
+  length: 1m
+- type: rest
+  name: Rest
+  length: 30s
+
+- type: warmdown
+  name: Warm down
+  length: 10m

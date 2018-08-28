@@ -1,4 +1,4 @@
-from interval import Workout, Interval, IntervalType
+from interval import Workout
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 
@@ -139,40 +139,9 @@ class Ui(QtWidgets.QWidget):
         string = "{:2d}:{:02.2f}".format(int(minutes), seconds)
         return string
 
-def example_workout():
-    workout = Workout("Threshold")
-    workout.add_interval(Interval(IntervalType.WARMUP, "Warm up", 10*60))
-    workout.add_interval(Interval(IntervalType.WORK, "Zone 3", 10*60))
-    workout.add_interval(Interval(IntervalType.REST, "Rest", 5*60))
-    workout.add_interval(Interval(IntervalType.WORK, "Zone 4, low", 5*60))
-    workout.add_interval(Interval(IntervalType.REST, "Rest", 1*60))
-    workout.add_interval(Interval(IntervalType.WORK, "Zone 4, low", 5*60))
-    workout.add_interval(Interval(IntervalType.REST, "Rest", 1*60))
-    workout.add_interval(Interval(IntervalType.REST, "Rest", 5*60))
-    workout.add_interval(Interval(IntervalType.WORK, "Zone 4, high", 2*60))
-    workout.add_interval(Interval(IntervalType.REST, "Rest", 0.5*60))
-    workout.add_interval(Interval(IntervalType.WORK, "Zone 4, high", 2*60))
-    workout.add_interval(Interval(IntervalType.REST, "Rest", 0.5*60))
-    workout.add_interval(Interval(IntervalType.WORK, "Zone 4, high", 2*60))
-    workout.add_interval(Interval(IntervalType.REST, "Rest", 0.5*60))
-    workout.add_interval(Interval(IntervalType.REST, "Rest", 5*60))
-    workout.add_interval(Interval(IntervalType.WORK, "Zone 5", 1*60))
-    workout.add_interval(Interval(IntervalType.REST, "Rest", 0.5*60))
-    workout.add_interval(Interval(IntervalType.WORK, "Zone 5", 1*60))
-    workout.add_interval(Interval(IntervalType.REST, "Rest", 0.5*60))
-    workout.add_interval(Interval(IntervalType.WORK, "Zone 5", 1*60))
-    workout.add_interval(Interval(IntervalType.REST, "Rest", 0.5*60))
-    workout.add_interval(Interval(IntervalType.WORK, "Zone 5", 1*60))
-    workout.add_interval(Interval(IntervalType.REST, "Rest", 0.5*60))
-    workout.add_interval(Interval(IntervalType.WORK, "Zone 5", 1*60))
-    workout.add_interval(Interval(IntervalType.REST, "Rest", 0.5*60))
-    workout.add_interval(Interval(IntervalType.WORK, "Zone 5", 1*60))
-    workout.add_interval(Interval(IntervalType.REST, "Rest", 0.5*60))
-    workout.add_interval(Interval(IntervalType.WARMDOWN, "Warm down", 10*60))
-
-    return workout
-
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    ui = Ui(example_workout())
+    workout = Workout()
+    workout.from_yaml('./threshold.yml')
+    ui = Ui(workout)
     sys.exit(app.exec_())

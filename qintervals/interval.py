@@ -1,13 +1,29 @@
 from enum import Enum, auto
 from time import time
+import yaml
 
 # Work out class
 class Workout(object):
-    def __init__(self, name):
-        self.name = name
+    def __init__(self):
         self.intervals = []
         self.cum_times = [0]
         self.total_time = 0
+
+    def from_yaml(self, yaml_file):
+        # Parse yaml file as a dictionary
+        with open(yaml_file, 'r') as stream:
+            try:
+                yaml_dict = yaml.load(stream)
+            except yaml.YAMLError as exc:
+                raise Exception('Error in yaml file')
+
+        # Read workout definition from dictionary
+        self.set_name(yaml_dict['title'])
+        for interval in yaml_dict['intervals']:
+            self.add_interval(Interval(interval['type'], interval['name'], interval['length']))
+
+    def set_name(self,name):
+        self.name = name
 
     def add_interval(self, interval):
         self.intervals.append(interval)
@@ -44,7 +60,19 @@ class Interval(object):
     def __init__(self, interval_type, text, length):
         self.interval_type = interval_type
         self.text = text
-        self.length = length
+
+        # Ensure time unit is minutes or seconds
+        time_unit = length[-1]
+        try:
+            assert time_unit in ['s','m']
+        except AssertionError:
+            raise AssertionError('Length of interval must be given in minutes(m) or seconds(s). Given unit was {}'.format(time_unit))
+
+        # Convert time to seconds
+        if time_unit == 's':
+            self.length = float(length[:-1])
+        elif time_unit == 'm':
+            self.length = float(length[:-1]) * 60.0
 
 # Interval type enum
 class IntervalType(Enum):
