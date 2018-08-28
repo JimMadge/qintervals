@@ -13,6 +13,12 @@ class Ui(QtWidgets.QWidget):
 
     # Initialise QFonts
     def init_fonts(self):
+        # Default font
+        self.font_default = QtGui.QFont()
+        self.font_default.setPointSize(14)
+        self.font_default.setWeight(QtGui.QFont.Normal)
+        self.setFont(self.font_default)
+
         # Workout name font
         self.font_workout_name = QtGui.QFont()
         self.font_workout_name.setPointSize(20)
@@ -33,11 +39,6 @@ class Ui(QtWidgets.QWidget):
         self.font_upcoming_header = QtGui.QFont()
         self.font_upcoming_header.setPointSize(14)
         self.font_upcoming_header.setWeight(QtGui.QFont.Bold)
-
-        # Upcoming intervals font
-        self.font_upcoming_interval = QtGui.QFont()
-        self.font_upcoming_interval.setPointSize(14)
-        self.font_upcoming_interval.setWeight(QtGui.QFont.Normal)
 
     # Initialise the ui
     def init_ui(self,workout):
@@ -99,7 +100,6 @@ class Ui(QtWidgets.QWidget):
         # Upcoming interval labels
         self.label_upcoming_intervals = [QtWidgets.QLabel() for i in range(5)]
         for label in self.label_upcoming_intervals:
-            label.setFont(self.font_upcoming_interval)
             self.vbox_upcoming.addWidget(label, QtCore.Qt.AlignCenter)
 
         # Initialise timer
