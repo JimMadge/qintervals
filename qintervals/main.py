@@ -8,7 +8,30 @@ _HEIGHT = 500
 class Ui(QtWidgets.QWidget):
     def __init__(self, workout):
         super().__init__()
+        self.init_fonts()
         self.init_ui(workout)
+
+    # Initialise QFonts
+    def init_fonts(self):
+        # Workout name font
+        self.font_workout_name = QtGui.QFont()
+        self.font_workout_name.setPointSize(20)
+        self.font_workout_name.setWeight(QtGui.QFont.Bold)
+
+        # Interval name font
+        self.font_interval_name = QtGui.QFont()
+        self.font_interval_name.setPointSize(16)
+        self.font_interval_name.setWeight(QtGui.QFont.Bold)
+
+        # Upcoming intervals header font
+        self.font_upcoming_header = QtGui.QFont()
+        self.font_upcoming_header.setPointSize(14)
+        self.font_upcoming_header.setWeight(QtGui.QFont.Bold)
+
+        # Upcoming intervals font
+        self.font_upcoming_interval = QtGui.QFont()
+        self.font_upcoming_interval.setPointSize(14)
+        self.font_upcoming_interval.setWeight(QtGui.QFont.Normal)
 
     # Initialise the ui
     def init_ui(self,workout):
@@ -26,18 +49,12 @@ class Ui(QtWidgets.QWidget):
         self.grid_layout.setContentsMargins(0, 0, 0, 0)
 
         # Workout name
-        self.font_workout_name = QtGui.QFont()
-        self.font_workout_name.setPointSize(20)
-        self.font_workout_name.setWeight(QtGui.QFont.Bold)
         self.label_workout_name = QtWidgets.QLabel(self.grid_widget)
         self.label_workout_name.setFont(self.font_workout_name)
         self.label_workout_name.setText(self.workout.name)
         self.grid_layout.addWidget(self.label_workout_name, 0, 0, 1, -1, QtCore.Qt.AlignCenter)
 
         # Interval name
-        self.font_interval_name = QtGui.QFont()
-        self.font_interval_name.setPointSize(16)
-        self.font_interval_name.setWeight(QtGui.QFont.Bold)
         self.label_interval_name = QtWidgets.QLabel(self.grid_widget)
         self.label_interval_name.setFont(self.font_interval_name)
         self.label_interval_name.setText(self.workout.intervals[0].text)
@@ -66,18 +83,12 @@ class Ui(QtWidgets.QWidget):
         self.grid_layout.addLayout(self.vbox_upcoming, 1, 2, 2, 1, QtCore.Qt.AlignCenter)
 
         # Upcoming intervals header
-        self.font_upcoming_header = QtGui.QFont()
-        self.font_upcoming_header.setPointSize(14)
-        self.font_upcoming_header.setWeight(QtGui.QFont.Bold)
         self.label_upcoming = QtWidgets.QLabel(self.grid_widget)
         self.label_upcoming.setFont(self.font_upcoming_header)
         self.label_upcoming.setText("Upcoming")
         self.vbox_upcoming.addWidget(self.label_upcoming, QtCore.Qt.AlignCenter)
 
         # Upcoming interval labels
-        self.font_upcoming_interval = QtGui.QFont()
-        self.font_upcoming_interval.setPointSize(14)
-        self.font_upcoming_interval.setWeight(QtGui.QFont.Normal)
         self.label_upcoming_intervals = [QtWidgets.QLabel() for i in range(5)]
         for label in self.label_upcoming_intervals:
             label.setFont(self.font_upcoming_interval)
