@@ -23,6 +23,12 @@ class Ui(QtWidgets.QWidget):
         self.font_interval_name.setPointSize(16)
         self.font_interval_name.setWeight(QtGui.QFont.Bold)
 
+        # Time digits font
+        self.font_time = QtGui.QFont()
+        self.font_time.setPointSize(14)
+        #self.font_time.setStyleHint(QtGui.QFont.TypeWriter)
+        self.font_time.setStyleHint(QtGui.QFont.Monospace)
+
         # Upcoming intervals header font
         self.font_upcoming_header = QtGui.QFont()
         self.font_upcoming_header.setPointSize(14)
@@ -66,6 +72,7 @@ class Ui(QtWidgets.QWidget):
         self.grid_layout.addWidget(self.label_interval_remaining, 2, 0, QtCore.Qt.AlignCenter)
         # Interval remaining time
         self.label_interval_remaining_time = QtWidgets.QLabel(self.grid_widget)
+        self.label_interval_remaining_time.setFont(self.font_time)
         self.label_interval_remaining_time.setText(self.time_str(0))
         self.grid_layout.addWidget(self.label_interval_remaining_time, 2, 1, QtCore.Qt.AlignCenter)
 
@@ -75,6 +82,7 @@ class Ui(QtWidgets.QWidget):
         self.grid_layout.addWidget(self.label_total_remaining, 3, 0, QtCore.Qt.AlignCenter)
         # Total remaining time
         self.label_total_remaining_time = QtWidgets.QLabel(self.grid_widget)
+        self.label_total_remaining_time.setFont(self.font_time)
         self.label_total_remaining_time.setText(self.time_str(0))
         self.grid_layout.addWidget(self.label_total_remaining_time, 3, 1, QtCore.Qt.AlignCenter)
 
