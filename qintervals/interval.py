@@ -1,4 +1,5 @@
 from enum import Enum, auto
+from time import time
 
 # Work out class
 class Workout(object):
@@ -13,11 +14,11 @@ class Workout(object):
         self.cum_times.append(self.cum_times[-1] + interval.length)
         self.total_time += interval.length
 
-    def start(self, time):
-        self.start_time = time
+    def start(self):
+        self.start_time = time()
 
-    def progress(self, time):
-        elapsed = time - self.start_time
+    def progress(self):
+        elapsed = time() - self.start_time
         remaining = self.total_time - elapsed
 
         # Determine current interval
@@ -31,8 +32,8 @@ class Workout(object):
 
         return elapsed, remaining, interval_elapsed, interval_remaining, interval
 
-    def upcoming(self, time):
-        elapsed = time - self.start_time
+    def upcoming(self):
+        elapsed = time() - self.start_time
         for i in range(len(self.intervals)):
             if elapsed > self.cum_times[i]:
                 current = i
