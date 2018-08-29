@@ -11,6 +11,7 @@ class Workout(object):
         self.current_interval = 0
         self.paused = False
         self.time_paused = 0
+        self.stopped = True
 
     # Parse a yaml file to read a workout
     def from_yaml(self, yaml_file):
@@ -41,6 +42,9 @@ class Workout(object):
         if self.paused:
             self.paused = False
             self.time_paused += time() - self.paused_at
+        elif self.stopped:
+            self.stopped = False
+            self.start_time = time()
         else:
             self.start_time = time()
 
@@ -52,9 +56,17 @@ class Workout(object):
             self.paused = True
             self.paused_at = time()
 
+    # Stop the timer, return to the begining
+    def stop(self):
+        print('hello')
+        self.stopped = True
+        self.paused = False
+        self.current_interval = 0
+        self.time_paused = 0
+
     # Start the workout time if paused, pause the workout timer if not paused
     def start_pause(self):
-        if self.paused:
+        if self.paused or self.stopped:
             self.start()
         else:
             self.pause()
@@ -63,6 +75,8 @@ class Workout(object):
     def elapsed(self):
         if self.paused:
             return self.paused_at - self.start_time - self.time_paused
+        elif self.stopped:
+            return 0.0
         else:
             return time() - self.start_time - self.time_paused
 
