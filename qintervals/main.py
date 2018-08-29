@@ -110,6 +110,9 @@ class Ui(QtWidgets.QWidget):
         self.timer.timeout.connect(self.redraw)
         self.timer.start()
 
+        # Create start/pause shortcut
+        self.shortcut_start_pause = QtWidgets.QShortcut(QtCore.Qt.Key_Space, self, self.workout.start_pause)
+
         # Start the workout
         self.workout.start()
 

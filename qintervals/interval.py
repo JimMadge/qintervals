@@ -9,7 +9,10 @@ class Workout(object):
         self.cum_times = [0]
         self.total_time = 0
         self.current_interval = 0
+        self.paused = False
+        self.time_paused = 0
 
+    # Parse a yaml file to read a workout
     def from_yaml(self, yaml_file):
         # Parse yaml file as a dictionary
         with open(yaml_file, 'r') as stream:
@@ -23,19 +26,50 @@ class Workout(object):
         for interval in yaml_dict['intervals']:
             self.add_interval(Interval(interval['type'], interval['name'], interval['length']))
 
+    # Set the workout name
     def set_name(self,name):
         self.name = name
 
+    # Add an interval to the end of the list
     def add_interval(self, interval):
         self.intervals.append(interval)
         self.cum_times.append(self.cum_times[-1] + interval.length)
         self.total_time += interval.length
 
+    # Start the workout timer
     def start(self):
-        self.start_time = time()
+        if self.paused:
+            self.paused = False
+            self.time_paused += time() - self.paused_at
+        else:
+            self.start_time = time()
 
+    # Pause the workout timer
+    def pause(self):
+        if self.paused:
+            return
+        else:
+            self.paused = True
+            self.paused_at = time()
+
+    # Start the workout time if paused, pause the workout timer if not paused
+    def start_pause(self):
+        if self.paused:
+            self.start()
+        else:
+            self.pause()
+
+    # Determine the elapsed workout time (not including time paused)
+    def elapsed(self):
+        if self.paused:
+            return self.paused_at - self.start_time - self.time_paused
+        else:
+            return time() - self.start_time - self.time_paused
+
+    # Determine the total time elapsed and remaining, current interval time elapsed and remaining,
+    # the current interval and whether the interval has changed since the last call
     def progress(self):
-        elapsed = time() - self.start_time
+        elapsed = self.elapsed()
         remaining = self.total_time - elapsed
 
         # Determine current interval
@@ -47,11 +81,14 @@ class Workout(object):
 
         return elapsed, remaining, interval_elapsed, interval_remaining, interval, changed_interval
 
+    # List upcoming intervals
     def upcoming(self):
-        elapsed = time() - self.start_time
+        elapsed = self.elapsed()
         self.update_current_interval(elapsed)
         return  self.intervals[self.current_interval+1:]
 
+    # Determine current interval, returns a boolean indicating whether the interval has changed since
+    # the last call
     def update_current_interval(self,elapsed):
         old_interval = self.current_interval
         for i,time in enumerate(self.cum_times):
