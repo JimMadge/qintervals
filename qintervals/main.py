@@ -1,6 +1,7 @@
 from interval import Workout
 from PyQt5 import QtCore, QtGui, QtWidgets, QtMultimedia
 import sys
+import argparse
 
 _WIDTH = 500
 _HEIGHT = 500
@@ -147,9 +148,22 @@ class Ui(QtWidgets.QWidget):
         string = "{:2d}:{:04.1f}".format(int(minutes), seconds)
         return string
 
+def parse_args():
+    parser = argparse.ArgumentParser(prog='qintervals', description='Interval training timer')
+    parser.add_argument('workout', type=str, action='store',
+            help='YAML workout file to read')
+
+    clargs = parser.parse_args()
+    return clargs
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+
+    # Get command line arguments
+    clargs = parse_args()
+    # Create workout object
     workout = Workout()
-    workout.from_yaml('./threshold.yml')
+    workout.from_yaml(clargs.workout)
+
     ui = Ui(workout)
     sys.exit(app.exec_())
