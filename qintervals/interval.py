@@ -9,9 +9,8 @@ class Workout(object):
         self.cum_times = [0]
         self.total_time = 0
         self.current_interval = 0
-        self.paused = False
         self.time_paused = 0
-        self.stopped = True
+        self.state = WorkoutState.STOPPED
 
     # Parse a yaml file to read a workout
     def from_yaml(self, yaml_file):
@@ -39,43 +38,36 @@ class Workout(object):
 
     # Start the workout timer
     def start(self):
-        if self.paused:
-            self.paused = False
+        if self.state == WorkoutState.PAUSED:
+            self.state = WorkoutState.RUNNING
             self.time_paused += time() - self.paused_at
-        elif self.stopped:
-            self.stopped = False
-            self.start_time = time()
-        else:
+        elif self.state == WorkoutState.STOPPED:
+            self.state = WorkoutState.RUNNING
             self.start_time = time()
 
     # Pause the workout timer
     def pause(self):
-        if self.paused:
-            return
-        else:
-            self.paused = True
-            self.paused_at = time()
+        self.state = WorkoutState.PAUSED
+        self.paused_at = time()
 
     # Stop the timer, return to the begining
     def stop(self):
-        print('hello')
-        self.stopped = True
-        self.paused = False
+        self.state = WorkoutState.STOPPED
         self.current_interval = 0
         self.time_paused = 0
 
     # Start the workout time if paused, pause the workout timer if not paused
     def start_pause(self):
-        if self.paused or self.stopped:
+        if self.state in [WorkoutState.PAUSED, WorkoutState.STOPPED]:
             self.start()
         else:
             self.pause()
 
     # Determine the elapsed workout time (not including time paused)
     def elapsed(self):
-        if self.paused:
+        if self.state == WorkoutState.PAUSED:
             return self.paused_at - self.start_time - self.time_paused
-        elif self.stopped:
+        elif self.state == WorkoutState.STOPPED:
             return 0.0
         else:
             return time() - self.start_time - self.time_paused
@@ -132,6 +124,12 @@ class Interval(object):
             self.length = float(length[:-1])
         elif time_unit == 'm':
             self.length = float(length[:-1]) * 60.0
+
+# Workout state enum
+class WorkoutState(Enum):
+    RUNNING = auto()
+    PAUSED = auto()
+    STOPPED = auto()
 
 # Interval type enum
 class IntervalType(Enum):
