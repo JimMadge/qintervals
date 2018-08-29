@@ -100,6 +100,7 @@ class Ui(QtWidgets.QWidget):
         self.label_upcoming_intervals = [QtWidgets.QLabel() for i in range(_UPCOMING_INTERVALS_DISPLAYED)]
         for label in self.label_upcoming_intervals:
             self.vbox_upcoming.addWidget(label, QtCore.Qt.AlignCenter)
+        self.write_upcoming_intervals()
 
         # Sound for changing interval
         self.bell = QtMultimedia.QSound('./tone.wav')
@@ -126,15 +127,13 @@ class Ui(QtWidgets.QWidget):
         self.label_interval_remaining_time.setText(self.time_str(self.interval_remaining))
         self.label_total_remaining_time.setText(self.time_str(self.remaining))
 
-        # Write current interval name
-        self.label_interval_name.setText(self.interval.text)
-
-        # Write upcoming interval names
-        self.write_upcoming_intervals()
-
-        # Play sound if interval has changed
         if changed_interval:
+            # Play sound if interval has changed
             self.bell.play()
+            # Write current interval name
+            self.label_interval_name.setText(self.interval.text)
+            # Write upcoming interval names
+            self.write_upcoming_intervals()
 
     # Write the names of upcoming intervals to the upcoming vbox layout
     def write_upcoming_intervals(self):
