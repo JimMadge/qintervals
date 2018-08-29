@@ -1,4 +1,4 @@
-from interval import Workout
+from interval import Workout, WorkoutState
 from PyQt5 import QtCore, QtGui, QtWidgets, QtMultimedia
 import sys
 import argparse
@@ -105,16 +105,26 @@ class Ui(QtWidgets.QWidget):
         # Sound for changing interval
         self.bell = QtMultimedia.QSound('./tone.wav')
 
+        # Create start/pause button
+        self.button_start_pause = QtWidgets.QPushButton('Start', self.grid_widget)
+        self.button_start_pause.setFont(self.font_default)
+        self.button_start_pause.clicked.connect(self.start_pause)
+        self.grid_layout.addWidget(self.button_start_pause, 4, 0, QtCore.Qt.AlignCenter)
+        self.button_stop = QtWidgets.QPushButton('Stop', self.grid_widget)
+        self.button_stop.setFont(self.font_default)
+        self.button_stop.clicked.connect(self.stop)
+        self.grid_layout.addWidget(self.button_stop, 4, 1, QtCore.Qt.AlignCenter)
+        self.update_buttons()
+        # Create start/pause shortcut
+        self.shortcut_start_pause = QtWidgets.QShortcut(QtCore.Qt.Key_Space, self, self.start_pause)
+        # Create stop shortcut
+        self.shortcut_stop = QtWidgets.QShortcut(QtCore.Qt.Key_S, self, self.stop)
+
         # Initialise timer
         self.timer = QtCore.QTimer()
         self.timer.setInterval(50)
         self.timer.timeout.connect(self.redraw)
         self.timer.start()
-
-        # Create start/pause shortcut
-        self.shortcut_start_pause = QtWidgets.QShortcut(QtCore.Qt.Key_Space, self, self.workout.start_pause)
-        # Create stop shortcut
-        self.shortcut_stop = QtWidgets.QShortcut(QtCore.Qt.Key_S, self, self.workout.stop)
 
         self.show()
 
@@ -134,6 +144,27 @@ class Ui(QtWidgets.QWidget):
             self.label_interval_name.setText(self.interval.text)
             # Write upcoming interval names
             self.write_upcoming_intervals()
+
+    # Start or pause the workout
+    def start_pause(self):
+        self.workout.start_pause()
+        self.update_buttons()
+
+    # Stop the workout
+    def stop(self):
+        self.workout.stop()
+        self.update_buttons()
+
+    # Write the appropriate button labels and activate/deactivate as necessary
+    def update_buttons(self):
+        if self.workout.state == WorkoutState.RUNNING:
+            self.button_start_pause.setText('Pause')
+            self.button_stop.setEnabled(True)
+        elif self.workout.state == WorkoutState.PAUSED:
+            self.button_start_pause.setText('Resume')
+        elif self.workout.state == WorkoutState.STOPPED:
+            self.button_start_pause.setText('Start')
+            self.button_stop.setEnabled(False)
 
     # Write the names of upcoming intervals to the upcoming vbox layout
     def write_upcoming_intervals(self):
