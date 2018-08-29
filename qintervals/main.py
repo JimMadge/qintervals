@@ -173,6 +173,8 @@ class Ui(QtWidgets.QWidget):
     # Stop the workout
     def stop(self):
         self.workout.stop()
+        self.label_interval_name.setText(self.workout.intervals[0].text)
+        self.write_upcoming_intervals()
         self.update_buttons()
 
     # Write the appropriate button labels and activate/deactivate as necessary
