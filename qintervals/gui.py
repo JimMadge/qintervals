@@ -18,8 +18,9 @@
 #  MA 02110-1301, USA.
 #
 #
-from interval import Workout, WorkoutState
+from .interval import Workout, WorkoutState
 from PyQt5 import QtCore, QtGui, QtWidgets, QtMultimedia
+from os import path
 import sys
 import argparse
 
@@ -123,7 +124,8 @@ class Ui(QtWidgets.QWidget):
         self.write_upcoming_intervals()
 
         # Sound for changing interval
-        self.bell = QtMultimedia.QSound('./tone.wav')
+        print(path.dirname(__file__)+'/tone.wav')
+        self.bell = QtMultimedia.QSound(path.dirname(__file__)+'/tone.wav')
 
         # Create start/pause button
         self.button_start_pause = QtWidgets.QPushButton('Start', self.grid_widget)
@@ -209,15 +211,3 @@ def parse_args():
 
     clargs = parser.parse_args()
     return clargs
-
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-
-    # Get command line arguments
-    clargs = parse_args()
-    # Create workout object
-    workout = Workout()
-    workout.from_yaml(clargs.workout)
-
-    ui = Ui(workout)
-    sys.exit(app.exec_())
