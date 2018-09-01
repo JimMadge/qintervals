@@ -12,11 +12,11 @@ An interval training program written in python with a Qt GUI.
 
 ## Installation
 
-Clone the repository and change into the root directory, then run `pip3 install .`
+Clone the repository and change into the root directory, then run `pip3 install --user .`
 
 ## Usage
 
-After installation the command `qintervals` should be installed to your local path. The program takes a single positional argument, which is the path to the YAML workout file you want to use. An example is included in the examples directory.
+After installation the command `qintervals` should be installed to your local path (_i.e._ `~/.local/bin/`). The program takes a single positional argument, which is the path to the YAML workout file you want to use. An example is included in the examples directory.
 
 `qintervals qintervals/examples/threshold.yml`
 
