@@ -26,7 +26,6 @@ import argparse
 
 _WIDTH = 500
 _HEIGHT = 500
-_UPCOMING_INTERVALS_DISPLAYED = 8
 
 class Ui(QtWidgets.QWidget):
     def __init__(self, workout):
@@ -107,21 +106,9 @@ class Ui(QtWidgets.QWidget):
         self.label_total_remaining_time.setText(self.time_str(0))
         self.grid_layout.addWidget(self.label_total_remaining_time, 3, 1, QtCore.Qt.AlignCenter)
 
-        # Grid layout for upcoming intervals
-        self.vbox_upcoming = QtWidgets.QVBoxLayout()
-        self.grid_layout.addLayout(self.vbox_upcoming, 1, 2, 3, 1, QtCore.Qt.AlignCenter)
-
-        # Upcoming intervals header
-        self.label_upcoming = QtWidgets.QLabel(self.grid_widget)
-        self.label_upcoming.setFont(self.font_upcoming_header)
-        self.label_upcoming.setText("Upcoming")
-        self.vbox_upcoming.addWidget(self.label_upcoming, QtCore.Qt.AlignCenter)
-
-        # Upcoming interval labels
-        self.label_upcoming_intervals = [QtWidgets.QLabel() for i in range(_UPCOMING_INTERVALS_DISPLAYED)]
-        for label in self.label_upcoming_intervals:
-            self.vbox_upcoming.addWidget(label, QtCore.Qt.AlignCenter)
-        self.write_upcoming_intervals()
+        # Upcoming intervals widget
+        self.upcoming_intervals = UpcomingIntervals(self.workout,self.font_upcoming_header)
+        self.grid_layout.addWidget(self.upcoming_intervals, 1, 2, 3, 1, QtCore.Qt.AlignCenter)
 
         # Sound for changing interval
         print(path.dirname(__file__)+'/tone.wav')
@@ -165,7 +152,7 @@ class Ui(QtWidgets.QWidget):
             # Write current interval name
             self.label_interval_name.setText(self.interval.text)
             # Write upcoming interval names
-            self.write_upcoming_intervals()
+            self.upcoming_intervals.write_upcoming_intervals()
 
     # Start or pause the workout
     def start_pause(self):
@@ -176,7 +163,7 @@ class Ui(QtWidgets.QWidget):
     def stop(self):
         self.workout.stop()
         self.label_interval_name.setText(self.workout.intervals[0].text)
-        self.write_upcoming_intervals()
+        self.upcoming_intervals.write_upcoming_intervals()
         self.update_buttons()
 
     # Write the appropriate button labels and activate/deactivate as necessary
@@ -190,19 +177,41 @@ class Ui(QtWidgets.QWidget):
             self.button_start_pause.setText('Start')
             self.button_stop.setEnabled(False)
 
-    # Write the names of upcoming intervals to the upcoming vbox layout
-    def write_upcoming_intervals(self):
-        # Write hearder
-        upcoming = self.workout.upcoming()
-
-        for i,interval in enumerate(upcoming[:_UPCOMING_INTERVALS_DISPLAYED]):
-            self.label_upcoming_intervals[i].setText(interval.text)
-
     # Format a time in seconds for output
     def time_str(self,time):
         minutes, seconds = divmod(time, 60)
         string = "{:2d}:{:04.1f}".format(int(minutes), seconds)
         return string
+
+class UpcomingIntervals(QtWidgets.QWidget):
+    def __init__(self,workout,font_upcoming_header):
+        super().__init__()
+
+        self._UPCOMING_INTERVALS_DISPLAYED = 8
+        self.workout = workout
+
+        # VBox layout for upcoming intervals
+        self.vbox_upcoming = QtWidgets.QVBoxLayout(self)
+
+        # Upcoming intervals header
+        self.label_upcoming = QtWidgets.QLabel(self)
+        self.label_upcoming.setFont(font_upcoming_header)
+        self.label_upcoming.setText("Upcoming")
+        self.vbox_upcoming.addWidget(self.label_upcoming, QtCore.Qt.AlignCenter)
+
+        # Upcoming interval labels
+        self.label_upcoming_intervals = [QtWidgets.QLabel() for i in range(self._UPCOMING_INTERVALS_DISPLAYED)]
+        for label in self.label_upcoming_intervals:
+            self.vbox_upcoming.addWidget(label, QtCore.Qt.AlignCenter)
+        self.write_upcoming_intervals()
+
+    # Write the names of upcoming intervals to the upcoming vbox layout
+    def write_upcoming_intervals(self):
+        # Write hearder
+        upcoming = self.workout.upcoming()
+
+        for i,interval in enumerate(upcoming[:self._UPCOMING_INTERVALS_DISPLAYED]):
+            self.label_upcoming_intervals[i].setText(interval.text)
 
 def parse_args():
     parser = argparse.ArgumentParser(prog='qintervals', description='Interval training timer')
