@@ -9,7 +9,7 @@ setup(
     url='https://github.com/jimmadge/qintervals',
     license='GPLv3',
     packages=['qintervals'],
-    install_requires=['PyQt5'],
+    install_requires=['pyyaml'],
     include_package_data=True,
     scripts=['bin/qintervals']
 )

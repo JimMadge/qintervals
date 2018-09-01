@@ -5,8 +5,10 @@ An interval training program written in python with a Qt GUI.
 ## Requirements
 
 - Python3
+- Qt5
 - setuptools
 - PyQt5
+- PyYAML
 
 ## Installation
 
