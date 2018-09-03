@@ -111,7 +111,6 @@ class Ui(QtWidgets.QWidget):
         self.grid_layout.addWidget(self.upcoming_intervals, 1, 2, 3, 1, QtCore.Qt.AlignCenter)
 
         # Sound for changing interval
-        print(path.dirname(__file__)+'/tone.wav')
         self.bell = QtMultimedia.QSound(path.dirname(__file__)+'/tone.wav')
 
         # Create start/pause button
