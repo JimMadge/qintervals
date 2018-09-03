@@ -26,6 +26,8 @@ import argparse
 
 _WIDTH = 500
 _HEIGHT = 500
+_BORDER_HORIZONTAL = 25
+_BORDER_VERTICAL = 25
 
 class Ui(QtWidgets.QWidget):
     def __init__(self, workout):
@@ -70,7 +72,7 @@ class Ui(QtWidgets.QWidget):
 
         # Main grid layout
         self.grid_widget = QtWidgets.QWidget(self)
-        self.grid_widget.setGeometry(QtCore.QRect(50, 50, 400, 400))
+        self.grid_widget.setGeometry(QtCore.QRect(_BORDER_HORIZONTAL, _BORDER_VERTICAL, _WIDTH-2*_BORDER_HORIZONTAL, _HEIGHT-2*_BORDER_VERTICAL))
         self.grid_layout = QtWidgets.QGridLayout(self.grid_widget)
         self.grid_layout.setContentsMargins(0, 0, 0, 0)
 
