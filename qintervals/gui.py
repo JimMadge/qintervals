@@ -86,29 +86,22 @@ class Ui(QtWidgets.QWidget):
         self.label_interval_name = QtWidgets.QLabel(self.grid_widget)
         self.label_interval_name.setFont(self.font_interval_name)
         self.label_interval_name.setText(self.workout.intervals[0].text)
-        self.grid_layout.addWidget(self.label_interval_name, 1, 0, 1, 2, QtCore.Qt.AlignCenter)
+        self.grid_layout.addWidget(self.label_interval_name, 1, 0, 1, 1, QtCore.Qt.AlignCenter)
 
         # Timers
         self.timers = Timers(self.font_time)
-        self.grid_layout.addWidget(self.timers, 2, 0, 1, 2, QtCore.Qt.AlignCenter)
+        self.grid_layout.addWidget(self.timers, 2, 0, 1, 1, QtCore.Qt.AlignCenter)
 
         # Upcoming intervals widget
         self.upcoming_intervals = UpcomingIntervals(self.workout,self.font_upcoming_header)
-        self.grid_layout.addWidget(self.upcoming_intervals, 1, 2, 3, 1, QtCore.Qt.AlignCenter)
+        self.grid_layout.addWidget(self.upcoming_intervals, 1, 1, 3, 1, QtCore.Qt.AlignCenter)
 
         # Sound for changing interval
         self.bell = QtMultimedia.QSound(path.dirname(__file__)+'/tone.wav')
 
-        # Create start/pause button
-        self.button_start_pause = QtWidgets.QPushButton('Start', self.grid_widget)
-        self.button_start_pause.setFont(self.font_default)
-        self.button_start_pause.clicked.connect(self.start_pause)
-        self.grid_layout.addWidget(self.button_start_pause, 3, 0, QtCore.Qt.AlignCenter)
-        self.button_stop = QtWidgets.QPushButton('Stop', self.grid_widget)
-        self.button_stop.setFont(self.font_default)
-        self.button_stop.clicked.connect(self.stop)
-        self.grid_layout.addWidget(self.button_stop, 3, 1, QtCore.Qt.AlignCenter)
-        self.update_buttons()
+        # Create buttons
+        self.buttons = Buttons(self.workout,self.start_pause,self.stop,self.font_default)
+        self.grid_layout.addWidget(self.buttons, 3, 0, 1, 1, QtCore.Qt.AlignCenter)
         # Create start/pause shortcut
         self.shortcut_start_pause = QtWidgets.QShortcut(QtCore.Qt.Key_Space, self, self.start_pause)
         # Create stop shortcut
@@ -140,25 +133,14 @@ class Ui(QtWidgets.QWidget):
     # Start or pause the workout
     def start_pause(self):
         self.workout.start_pause()
-        self.update_buttons()
+        self.buttons.update_buttons()
 
     # Stop the workout
     def stop(self):
         self.workout.stop()
         self.label_interval_name.setText(self.workout.intervals[0].text)
         self.upcoming_intervals.write_upcoming_intervals()
-        self.update_buttons()
-
-    # Write the appropriate button labels and activate/deactivate as necessary
-    def update_buttons(self):
-        if self.workout.state == WorkoutState.RUNNING:
-            self.button_start_pause.setText('Pause')
-            self.button_stop.setEnabled(True)
-        elif self.workout.state == WorkoutState.PAUSED:
-            self.button_start_pause.setText('Resume')
-        elif self.workout.state == WorkoutState.STOPPED:
-            self.button_start_pause.setText('Start')
-            self.button_stop.setEnabled(False)
+        self.buttons.update_buttons()
 
 class Timers(QtWidgets.QWidget):
     def __init__(self,font_time):
@@ -197,6 +179,38 @@ class Timers(QtWidgets.QWidget):
         minutes, seconds = divmod(time, 60)
         string = "{:2d}:{:04.1f}".format(int(minutes), seconds)
         return string
+
+class Buttons(QtWidgets.QWidget):
+    def __init__(self,workout,start_pause,stop,font_default):
+        super().__init__()
+
+        self.workout = workout
+
+        self.hbox = QtWidgets.QHBoxLayout(self)
+
+        # Create start/pause button
+        self.button_start_pause = QtWidgets.QPushButton('Start', self)
+        self.button_start_pause.setFont(font_default)
+        self.button_start_pause.clicked.connect(start_pause)
+        self.hbox.addWidget(self.button_start_pause, QtCore.Qt.AlignCenter)
+
+        # Create stop button
+        self.button_stop = QtWidgets.QPushButton('Stop', self)
+        self.button_stop.setFont(font_default)
+        self.button_stop.clicked.connect(stop)
+        self.hbox.addWidget(self.button_stop, QtCore.Qt.AlignCenter)
+        self.update_buttons()
+
+    # Write the appropriate button labels and activate/deactivate as necessary
+    def update_buttons(self):
+        if self.workout.state == WorkoutState.RUNNING:
+            self.button_start_pause.setText('Pause')
+            self.button_stop.setEnabled(True)
+        elif self.workout.state == WorkoutState.PAUSED:
+            self.button_start_pause.setText('Resume')
+        elif self.workout.state == WorkoutState.STOPPED:
+            self.button_start_pause.setText('Start')
+            self.button_stop.setEnabled(False)
 
 class UpcomingIntervals(QtWidgets.QWidget):
     def __init__(self,workout,font_upcoming_header):
