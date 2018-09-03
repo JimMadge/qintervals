@@ -86,25 +86,9 @@ class Ui(QtWidgets.QWidget):
         self.label_interval_name.setText(self.workout.intervals[0].text)
         self.grid_layout.addWidget(self.label_interval_name, 1, 0, 1, 2, QtCore.Qt.AlignCenter)
 
-        # Interval remaining label
-        self.label_interval_remaining = QtWidgets.QLabel(self.grid_widget)
-        self.label_interval_remaining.setText("Interval Remaining")
-        self.grid_layout.addWidget(self.label_interval_remaining, 2, 0, QtCore.Qt.AlignCenter)
-        # Interval remaining time
-        self.label_interval_remaining_time = QtWidgets.QLabel(self.grid_widget)
-        self.label_interval_remaining_time.setFont(self.font_time)
-        self.label_interval_remaining_time.setText(self.time_str(0))
-        self.grid_layout.addWidget(self.label_interval_remaining_time, 2, 1, QtCore.Qt.AlignCenter)
-
-        # Total remaining label
-        self.label_total_remaining = QtWidgets.QLabel(self.grid_widget)
-        self.label_total_remaining.setText("Total Remaining")
-        self.grid_layout.addWidget(self.label_total_remaining, 3, 0, QtCore.Qt.AlignCenter)
-        # Total remaining time
-        self.label_total_remaining_time = QtWidgets.QLabel(self.grid_widget)
-        self.label_total_remaining_time.setFont(self.font_time)
-        self.label_total_remaining_time.setText(self.time_str(0))
-        self.grid_layout.addWidget(self.label_total_remaining_time, 3, 1, QtCore.Qt.AlignCenter)
+        # Timers
+        self.timers = Timers(self.font_time)
+        self.grid_layout.addWidget(self.timers, 2, 0, 1, 2, QtCore.Qt.AlignCenter)
 
         # Upcoming intervals widget
         self.upcoming_intervals = UpcomingIntervals(self.workout,self.font_upcoming_header)
@@ -117,11 +101,11 @@ class Ui(QtWidgets.QWidget):
         self.button_start_pause = QtWidgets.QPushButton('Start', self.grid_widget)
         self.button_start_pause.setFont(self.font_default)
         self.button_start_pause.clicked.connect(self.start_pause)
-        self.grid_layout.addWidget(self.button_start_pause, 4, 0, QtCore.Qt.AlignCenter)
+        self.grid_layout.addWidget(self.button_start_pause, 3, 0, QtCore.Qt.AlignCenter)
         self.button_stop = QtWidgets.QPushButton('Stop', self.grid_widget)
         self.button_stop.setFont(self.font_default)
         self.button_stop.clicked.connect(self.stop)
-        self.grid_layout.addWidget(self.button_stop, 4, 1, QtCore.Qt.AlignCenter)
+        self.grid_layout.addWidget(self.button_stop, 3, 1, QtCore.Qt.AlignCenter)
         self.update_buttons()
         # Create start/pause shortcut
         self.shortcut_start_pause = QtWidgets.QShortcut(QtCore.Qt.Key_Space, self, self.start_pause)
@@ -139,17 +123,15 @@ class Ui(QtWidgets.QWidget):
     # Redraw dynamic elements of the ui
     def redraw(self):
         # Obtain current time elapsed and remaining, and current interval
-        self.elapsed, self.remaining, self.interval_elapsed, self.interval_remaining, self.interval, changed_interval = self.workout.progress()
+        elapsed, remaining, interval_elapsed, interval_remaining, interval, changed_interval = self.workout.progress()
 
-        # Write current times
-        self.label_interval_remaining_time.setText(self.time_str(self.interval_remaining))
-        self.label_total_remaining_time.setText(self.time_str(self.remaining))
+        self.timers.update_times(remaining, interval_remaining)
 
         if changed_interval:
             # Play sound if interval has changed
             self.bell.play()
             # Write current interval name
-            self.label_interval_name.setText(self.interval.text)
+            self.label_interval_name.setText(interval.text)
             # Write upcoming interval names
             self.upcoming_intervals.write_upcoming_intervals()
 
@@ -175,6 +157,38 @@ class Ui(QtWidgets.QWidget):
         elif self.workout.state == WorkoutState.STOPPED:
             self.button_start_pause.setText('Start')
             self.button_stop.setEnabled(False)
+
+class Timers(QtWidgets.QWidget):
+    def __init__(self,font_time):
+        super().__init__()
+
+        self.grid_layout = QtWidgets.QGridLayout(self)
+
+        # Interval remaining label
+        self.label_interval_remaining = QtWidgets.QLabel(self)
+        self.label_interval_remaining.setText("Interval")
+        self.grid_layout.addWidget(self.label_interval_remaining, 2, 0, QtCore.Qt.AlignCenter)
+        # Interval remaining time
+        self.label_interval_remaining_time = QtWidgets.QLabel(self)
+        self.label_interval_remaining_time.setFont(font_time)
+        self.label_interval_remaining_time.setText(self.time_str(0))
+        self.grid_layout.addWidget(self.label_interval_remaining_time, 2, 1, QtCore.Qt.AlignCenter)
+
+        # Total remaining label
+        self.label_total_remaining = QtWidgets.QLabel(self)
+        self.label_total_remaining.setText("Total")
+        self.grid_layout.addWidget(self.label_total_remaining, 3, 0, QtCore.Qt.AlignCenter)
+        # Total remaining time
+        self.label_total_remaining_time = QtWidgets.QLabel(self)
+        self.label_total_remaining_time.setFont(font_time)
+        self.label_total_remaining_time.setText(self.time_str(0))
+        self.grid_layout.addWidget(self.label_total_remaining_time, 3, 1, QtCore.Qt.AlignCenter)
+
+    # Update times
+    def update_times(self,remaining,interval_remaining):
+        # Write current times
+        self.label_interval_remaining_time.setText(self.time_str(interval_remaining))
+        self.label_total_remaining_time.setText(self.time_str(remaining))
 
     # Format a time in seconds for output
     def time_str(self,time):
