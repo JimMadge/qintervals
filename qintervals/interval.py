@@ -43,12 +43,35 @@ class Workout(object):
 
         # Read workout definition from dictionary
         self.set_name(yaml_dict['title'])
-        for interval in yaml_dict['intervals']:
-            self.add_interval(Interval(interval['type'], interval['name'], interval['length']))
+        for interval_or_block in yaml_dict['workout']:
+            # Ensure entry is an interval or a block
+            try:
+                assert any([key in interval_or_block for key in ['interval','block']])
+            except AssertionError:
+                raise AssertionError('Key in workout list must be "interval" or "block".')
+
+            # Add repeats of block to the interval list
+            if 'block' in interval_or_block:
+                block = interval_or_block
+                repeat = block['repeat']
+                intervals = []
+                for interval in block['intervals']:
+                    intervals.append(Interval(interval['type'], interval['name'], interval['length']))
+                self.add_block(repeat, intervals)
+            # Add single interval to the interval list
+            elif 'interval' in interval_or_block:
+                interval = interval_or_block
+                self.add_interval(Interval(interval['type'], interval['name'], interval['length']))
 
     # Set the workout name
     def set_name(self,name):
         self.name = name
+
+    # Add a block of intervals to the end of the list
+    def add_block(self, repeat, intervals):
+        for i in range(repeat):
+            for interval in intervals:
+                self.add_interval(interval)
 
     # Add an interval to the end of the list
     def add_interval(self, interval):
@@ -70,7 +93,7 @@ class Workout(object):
         self.state = WorkoutState.PAUSED
         self.paused_at = time()
 
-    # Stop the timer, return to the begining
+    # Stop the timer, return to the beginning
     def stop(self):
         self.state = WorkoutState.STOPPED
         self.current_interval = 0

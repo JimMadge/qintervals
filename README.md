@@ -25,29 +25,51 @@ After installation the command `qintervals` should be installed to your local pa
 The workout files are written in yaml with the following keys,
 
 - `title` - the title of the workout
-- `intervals` - the ordered list of intervals in the workout
+- `workout` - the ordered list of intervals or blocks of intervals in the workout
 
-Each interval in the list has the following keys,
+The value of workout is a mixed list of intervals (with key `interval`) or
+blocks (with key `block`).
+
+Each interval has the following keys,
 
 - `type` - the type of interval, which can take the values warmup, warmdown, work and rest
 - `name` - a label for the interval that is displayed by the program, which can be used to give instructions
 - `length` - the length of the interval given as a number immediately followed by 's' for seconds and 'm' for minutes _e.g._ '30s' or '5m'
 
+A block is a collection of intervals that are repeated. A block has the
+following keys,
+
+- `repeat` - the number of times to repeat a block
+- `intervals` - the ordered list of intervals (as defined above) to be repeated
+
 For example
 ```yaml
 title: Threshold
-intervals:
-- type: warmup
-  name: Warm up
-  length: 10m
+workout:
+  - interval:
+    type: warmup
+    name: Warm up
+    length: 10m
 
-- type: work
-  name: Zone 3
-  length: 10m
+  - interval:
+    type: work
+    name: Zone 3
+    length: 10m
 
-- type: rest
-  name: Rest
-  length: 5m
+  - interval:
+    type: rest
+    name: Rest
+    length: 5m
+
+  - block:
+    repeat: 2
+    intervals:
+      - type: work
+        name: Zone 4, low
+        length: 5m
+      - type: rest
+        name: Rest
+        length: 60s
 
 ...
 ```
