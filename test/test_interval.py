@@ -10,3 +10,6 @@ def test_invalid_interval_type_error():
     with pytest.raises(IntervalTypeError):
         interval = Interval(70.5, 'test', '100s')
 
+def test_invalid_text():
+    with pytest.raises(TypeError):
+        interval = Interval(IntervalType.WORK, 54, '100s')

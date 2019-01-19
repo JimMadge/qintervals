@@ -28,7 +28,10 @@ class Interval(object):
         else:
             raise IntervalTypeError('Invalid interval type provided {}'.format(interval_type))
 
-        self.text = text
+        if isinstance(text, str):
+            self.text = text
+        else:
+            raise TypeError('Arugment "text" must be a str')
 
         # Ensure time unit is minutes or seconds
         time_unit = length[-1]
