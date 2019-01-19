@@ -42,7 +42,7 @@ class Workout(object):
             try:
                 yaml_dict = yaml.load(stream)
             except yaml.YAMLError as exc:
-                raise Exception('Error in yaml file')
+                raise yaml.YAMLError('Error in YAML file: {}'.format(yaml_file))
 
         # Read workout definition from dictionary
         self.set_name(yaml_dict['title'])
