@@ -18,11 +18,10 @@
 #  MA 02110-1301, USA.
 #
 #
-from .interval import Workout, WorkoutState
+from .workout import Workout, WorkoutState
 from PyQt5 import QtCore, QtGui, QtWidgets, QtMultimedia
 from os import path
 from math import hypot, sin, pi
-import sys
 import argparse
 
 _WIDTH = 700

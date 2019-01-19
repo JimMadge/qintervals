@@ -19,6 +19,7 @@
 #
 #
 from enum import Enum, auto
+from .interval import Interval
 from time import time
 import yaml
 
