@@ -28,10 +28,8 @@ class Interval(object):
 
         # Ensure time unit is minutes or seconds
         time_unit = length[-1]
-        try:
-            assert time_unit in ['s','m']
-        except AssertionError:
-            raise AssertionError('Length of interval must be given in minutes(m) or seconds(s). Given unit was {}'.format(time_unit))
+        if time_unit not in ['s','m']:
+            raise TimeUnitError('Length of interval must be given in minutes(m) or seconds(s). Given unit was {}'.format(time_unit))
 
         # Convert time to seconds
         if time_unit == 's':
@@ -45,3 +43,7 @@ class IntervalType(Enum):
     REST = auto()
     WARMUP = auto()
     WARMDOWN = auto()
+
+# Incorrect time unit exception
+class TimeUnitError(Exception):
+    pass
