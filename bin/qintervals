@@ -6,8 +6,7 @@ app = QtWidgets.QApplication(sys.argv)
 # Get command line arguments
 clargs = parse_args()
 # Create workout object
-workout = Workout()
-workout.from_yaml(clargs.workout)
+workout = Workout(clargs.workout)
 
 ui = Ui(workout)
 sys.exit(app.exec_())

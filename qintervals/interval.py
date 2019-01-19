@@ -24,13 +24,16 @@ import yaml
 
 # Work out class
 class Workout(object):
-    def __init__(self):
+    def __init__(self, yaml_file=None):
         self.intervals = []
         self.cum_times = [0]
         self.total_time = 0
         self.current_interval = 0
         self.time_paused = 0
         self.state = WorkoutState.STOPPED
+
+        if yaml_file:
+            self.from_yaml(yaml_file)
 
     # Parse a yaml file to read a workout
     def from_yaml(self, yaml_file):
