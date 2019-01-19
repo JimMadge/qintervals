@@ -24,18 +24,19 @@ from enum import Enum, auto
 class Interval(object):
     def __init__(self, interval_type, text, length):
         self.interval_type = interval_type
+
         self.text = text
 
         # Ensure time unit is minutes or seconds
         time_unit = length[-1]
-        if time_unit not in ['s','m']:
-            raise TimeUnitError('Length of interval must be given in minutes(m) or seconds(s). Given unit was {}'.format(time_unit))
 
         # Convert time to seconds
         if time_unit == 's':
             self.length = float(length[:-1])
         elif time_unit == 'm':
             self.length = float(length[:-1]) * 60.0
+        else:
+            raise TimeUnitError('Length of interval must be given in minutes(m) or seconds(s). Given unit was {}'.format(time_unit))
 
 # Interval type enum
 class IntervalType(Enum):
