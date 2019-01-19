@@ -1,0 +1,7 @@
+title: 'Invalid YAML example'
+workout:
+  - list_item: 1
+    next_item: 2
+  not_in_list: 5
+  - list_item: 1
+    next_item: 2
