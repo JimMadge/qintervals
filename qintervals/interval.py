@@ -23,7 +23,10 @@ from enum import Enum, auto
 # Interval class
 class Interval(object):
     def __init__(self, interval_type, text, length):
-        self.interval_type = interval_type
+        if interval_type in IntervalType:
+            self.interval_type = interval_type
+        else:
+            raise IntervalTypeError('Invalid interval type provided {}'.format(interval_type))
 
         self.text = text
 
@@ -47,4 +50,8 @@ class IntervalType(Enum):
 
 # Incorrect time unit exception
 class TimeUnitError(Exception):
+    pass
+
+# Invalid interval type exception
+class IntervalTypeError(Exception):
     pass
