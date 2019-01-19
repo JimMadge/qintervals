@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/JimMadge/qintervals.svg?branch=master)](https://travis-ci.org/JimMadge/qintervals)
 # qintervals
 
 An interval training program written in python with a Qt GUI.
