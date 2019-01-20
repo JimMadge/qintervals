@@ -13,3 +13,8 @@ def test_invalid_interval_type_error():
 def test_invalid_text():
     with pytest.raises(TypeError):
         interval = Interval(IntervalType.WORK, 54, '100s')
+
+def test_time_unit_conversion():
+    interval = Interval(IntervalType.WORK, 'test', '1m')
+    interval2 = Interval(IntervalType.WORK, 'test', '60s')
+    assert interval.length == interval2.length == 60
