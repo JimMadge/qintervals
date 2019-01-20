@@ -19,7 +19,7 @@
 #
 #
 from enum import Enum, auto
-from .interval import Interval
+from .interval import Interval, IntervalType
 from time import time
 import yaml
 
@@ -39,43 +39,40 @@ class Workout(object):
     # Parse a yaml file to read a workout
     def from_yaml(self, yaml_file):
         # Parse yaml file as a dictionary
-        with open(yaml_file, 'r') as stream:
+        with open(yaml_file, 'rb') as stream:
             try:
                 yaml_dict = yaml.load(stream)
-            except yaml.YAMLError as exc:
+            except yaml.YAMLError:
                 raise yaml.YAMLError('Error in YAML file: {}'.format(yaml_file))
 
-        # Read workout definition from dictionary
+        # Read workout title
         self.set_name(yaml_dict['title'])
-        for interval_or_block in yaml_dict['workout']:
-            # Ensure entry is an interval or a block
-            try:
-                assert any([key in interval_or_block for key in ['interval','block']])
-            except AssertionError:
-                raise AssertionError('Key in workout list must be "interval" or "block".')
 
-            # Add repeats of block to the interval list
-            if 'block' in interval_or_block:
-                block = interval_or_block
-                repeat = block['repeat']
-                intervals = []
-                for interval in block['intervals']:
-                    intervals.append(Interval(interval['type'], interval['name'], interval['length']))
-                self.add_block(repeat, intervals)
-            # Add single interval to the interval list
-            elif 'interval' in interval_or_block:
-                interval = interval_or_block
-                self.add_interval(Interval(interval['type'], interval['name'], interval['length']))
+        # Read intervals
+        for entry in yaml_dict['intervals']:
+            for interval in self._unpack(entry):
+                self.add_interval(interval)
+
+    # Unpack a single interval or block into a list of interval objects
+    def _unpack(self, entry):
+        # Determine whether argument is a single interval or a block
+        if 'block' in entry.keys():
+            intervals = []
+            repeats = entry['repeats']
+            assert isinstance(repeats, int)
+            # Unpack intervals or blocks inside this entry recursively
+            for sub_entry in entry['intervals']:
+                intervals += self._unpack(sub_entry)
+
+            # Return the correct number of repetitions
+            return intervals*repeats
+        else:
+            # Return single interval
+            return [Interval(_interval_type[entry['type']], entry['name'], entry['length'])]
 
     # Set the workout name
     def set_name(self,name):
         self.name = name
-
-    # Add a block of intervals to the end of the list
-    def add_block(self, repeat, intervals):
-        for i in range(repeat):
-            for interval in intervals:
-                self.add_interval(interval)
 
     # Add an interval to the end of the list
     def add_interval(self, interval):
@@ -158,3 +155,6 @@ class WorkoutState(Enum):
     running = auto()
     paused = auto()
     stopped = auto()
+
+# Interval type translation dictionary
+_interval_type = {'work': IntervalType.work, 'rest': IntervalType.rest, 'warmup': IntervalType.warmup, 'warmdown': IntervalType.warmdown}
