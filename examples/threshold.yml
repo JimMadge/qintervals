@@ -1,22 +1,19 @@
 title: Threshold
-workout:
-  - interval:
-    type: warmup
+intervals:
+  - type: warmup
     name: Warm up
     length: 10m
 
-  - interval:
-    type: work
+  - type: work
     name: Zone 3
     length: 10m
 
-  - interval:
-    type: rest
+  - type: rest
     name: Rest
     length: 5m
 
   - block:
-    repeat: 2
+    repeats: 2
     intervals:
       - type: work
         name: Zone 4, low
@@ -25,13 +22,12 @@ workout:
         name: Rest
         length: 60s
 
-  - interval:
-    type: rest
+  - type: rest
     name: Rest
     length: 5m
 
   - block:
-    repeat: 3
+    repeats: 3
     intervals :
       - type: work
         name: Zone 4, high
@@ -40,13 +36,12 @@ workout:
         name: Rest
         length: 30s
 
-  - interval:
-    type: rest
+  - type: rest
     name: Rest
     length: 5m
 
   - block:
-    repeat: 6
+    repeats: 6
     intervals:
       - type: work
         name: Zone 5
@@ -55,7 +50,6 @@ workout:
         name: Rest
         length: 30s
 
-  - interval:
-    type: warmdown
+  - type: warmdown
     name: Warm down
     length: 10m

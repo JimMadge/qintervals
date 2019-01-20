@@ -18,11 +18,10 @@
 #  MA 02110-1301, USA.
 #
 #
-from .interval import Workout, WorkoutState
+from .workout import Workout, WorkoutState
 from PyQt5 import QtCore, QtGui, QtWidgets, QtMultimedia
 from os import path
 from math import hypot, sin, pi
-import sys
 import argparse
 
 _WIDTH = 700
@@ -222,12 +221,12 @@ class Buttons(QtWidgets.QWidget):
 
     # Write the appropriate button labels and activate/deactivate as necessary
     def update_buttons(self):
-        if self.workout.state == WorkoutState.RUNNING:
+        if self.workout.state == WorkoutState.running:
             self.button_start_pause.setText('Pause')
             self.button_stop.setEnabled(True)
-        elif self.workout.state == WorkoutState.PAUSED:
+        elif self.workout.state == WorkoutState.paused:
             self.button_start_pause.setText('Resume')
-        elif self.workout.state == WorkoutState.STOPPED:
+        elif self.workout.state == WorkoutState.stopped:
             self.button_start_pause.setText('Start')
             self.button_stop.setEnabled(False)
 
