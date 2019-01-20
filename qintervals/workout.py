@@ -31,7 +31,7 @@ class Workout(object):
         self.total_time = 0
         self.current_interval = 0
         self.time_paused = 0
-        self.state = WorkoutState.STOPPED
+        self.state = WorkoutState.stopped
 
         if yaml_file:
             self.from_yaml(yaml_file)
@@ -85,36 +85,36 @@ class Workout(object):
 
     # Start the workout timer
     def start(self):
-        if self.state == WorkoutState.PAUSED:
-            self.state = WorkoutState.RUNNING
+        if self.state == WorkoutState.paused:
+            self.state = WorkoutState.running
             self.time_paused += time() - self.paused_at
-        elif self.state == WorkoutState.STOPPED:
-            self.state = WorkoutState.RUNNING
+        elif self.state == WorkoutState.stopped:
+            self.state = WorkoutState.running
             self.start_time = time()
 
     # Pause the workout timer
     def pause(self):
-        self.state = WorkoutState.PAUSED
+        self.state = WorkoutState.paused
         self.paused_at = time()
 
     # Stop the timer, return to the beginning
     def stop(self):
-        self.state = WorkoutState.STOPPED
+        self.state = WorkoutState.stopped
         self.current_interval = 0
         self.time_paused = 0
 
     # Start the workout time if paused, pause the workout timer if not paused
     def start_pause(self):
-        if self.state in [WorkoutState.PAUSED, WorkoutState.STOPPED]:
+        if self.state in [WorkoutState.paused, WorkoutState.stopped]:
             self.start()
         else:
             self.pause()
 
     # Determine the elapsed workout time (not including time paused)
     def elapsed(self):
-        if self.state == WorkoutState.PAUSED:
+        if self.state == WorkoutState.paused:
             return self.paused_at - self.start_time - self.time_paused
-        elif self.state == WorkoutState.STOPPED:
+        elif self.state == WorkoutState.stopped:
             return 0.0
         else:
             return time() - self.start_time - self.time_paused
@@ -155,6 +155,6 @@ class Workout(object):
 
 # Workout state enum
 class WorkoutState(Enum):
-    RUNNING = auto()
-    PAUSED = auto()
-    STOPPED = auto()
+    running = auto()
+    paused = auto()
+    stopped = auto()

@@ -46,10 +46,10 @@ class Interval(object):
 
 # Interval type enum
 class IntervalType(Enum):
-    WORK = auto()
-    REST = auto()
-    WARMUP = auto()
-    WARMDOWN = auto()
+    work = auto()
+    rest = auto()
+    warmup = auto()
+    warmdown = auto()
 
 # Incorrect time unit exception
 class TimeUnitError(Exception):

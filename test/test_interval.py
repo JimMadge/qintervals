@@ -4,7 +4,7 @@ from qintervals.interval import Interval, IntervalType, TimeUnitError, IntervalT
 
 def test_time_unit_error():
     with pytest.raises(TimeUnitError):
-        interval = Interval(IntervalType.WORK, 'test', '100f')
+        interval = Interval(IntervalType.work, 'test', '100f')
 
 def test_invalid_interval_type_error():
     with pytest.raises(IntervalTypeError):
@@ -12,9 +12,9 @@ def test_invalid_interval_type_error():
 
 def test_invalid_text():
     with pytest.raises(TypeError):
-        interval = Interval(IntervalType.WORK, 54, '100s')
+        interval = Interval(IntervalType.work, 54, '100s')
 
 def test_time_unit_conversion():
-    interval = Interval(IntervalType.WORK, 'test', '1m')
-    interval2 = Interval(IntervalType.WORK, 'test', '60s')
+    interval = Interval(IntervalType.work, 'test', '1m')
+    interval2 = Interval(IntervalType.work, 'test', '60s')
     assert interval.length == interval2.length == 60
