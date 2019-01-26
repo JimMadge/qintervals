@@ -47,7 +47,7 @@ class Workout(object):
 
         # Read workout title
         try:
-            self.set_name(yaml_dict['title'])
+            self.name = yaml_dict['title']
         except KeyError:
             raise MissingKeyError('Workout file missing key: "title"')
 
@@ -91,10 +91,6 @@ class Workout(object):
                 return [Interval(_interval_type[entry['type']], entry['name'], entry['length'])]
             except KeyError:
                 raise MissingKeyError('Interval in workout file missing a key\n\t{}'.format(entry))
-
-    # Set the workout name
-    def set_name(self,name):
-        self.name = name
 
     # Add an interval to the end of the list
     def add_interval(self, interval):
