@@ -316,11 +316,16 @@ class UpcomingIntervals(QtWidgets.QWidget):
 
     # Write the names of upcoming intervals to the upcoming vbox layout
     def write_upcoming_intervals(self):
-        # Write hearder
-        upcoming = self.workout.upcoming()
+        # Get upcoming intervals up to the display limit
+        upcoming = self.workout.upcoming()[:self._UPCOMING_INTERVALS_DISPLAYED]
 
-        for i,interval in enumerate(upcoming[:self._UPCOMING_INTERVALS_DISPLAYED]):
-            self.label_upcoming_intervals[i].setText(interval.text)
+        # Set labels of upcoming intevals up to the display limit
+        for label, interval in zip(self.label_upcoming_intervals, upcoming):
+                label.setText(interval.text)
+        # Blank the remainder of the labels if the number displayed is greater
+        # than the number of intervals remaining
+        for label in self.label_upcoming_intervals[len(upcoming):]:
+            label.setText('')
 
 def parse_args():
     parser = argparse.ArgumentParser(prog='qintervals', description='Interval training timer')
