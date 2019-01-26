@@ -1,0 +1,17 @@
+title: Block Test
+intervals:
+  - type: warmup
+    name: One
+    length: 3s
+  - type: work
+    name: Two
+    length: 3s
+  - block:
+      repeats: 2
+      internals:
+        - type: work
+          name: Block One
+          length: 3s
+        - type: work
+          name: Block Two
+          length: 3s

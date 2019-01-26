@@ -46,10 +46,19 @@ class Workout(object):
                 raise WorkoutFileError('Invalid YAML in workout file: {}'.format(yaml_file))
 
         # Read workout title
-        self.set_name(yaml_dict['title'])
+        try:
+            self.set_name(yaml_dict['title'])
+        except KeyError:
+            raise MissingKeyError('Workout file missing key: "title"')
 
-        # Read intervals
-        for entry in yaml_dict['intervals']:
+        # Read intervals and blocks
+        try:
+            entries = yaml_dict['intervals']
+        except KeyError:
+            raise MissingKeyError('Workout file missing key: "intervals"')
+
+        # Unpack blocks or intervals and add them to the workout
+        for entry in entries:
             for interval in self._unpack(entry):
                 self.add_interval(interval)
 
@@ -59,9 +68,18 @@ class Workout(object):
         if 'block' in entry.keys():
             intervals = []
             block = entry['block']
-            repeats = block['repeats']
-            assert isinstance(repeats, int)
+            try:
+                repeats = block['repeats']
+                assert isinstance(repeats, int)
+            except KeyError:
+                raise MissingKeyError('Block in workout file missing key: "repeats"\n\t{}'.format(entry))
+
             # Unpack intervals or blocks inside this entry recursively
+            try:
+                sub_entries = block['intervals']
+            except KeyError:
+                raise MissingKeyError('Block in workout file missing key: "intervals"\n\t{}'.format(entry))
+
             for sub_entry in block['intervals']:
                 intervals += self._unpack(sub_entry)
 
@@ -69,7 +87,10 @@ class Workout(object):
             return intervals*repeats
         else:
             # Return single interval
-            return [Interval(_interval_type[entry['type']], entry['name'], entry['length'])]
+            try:
+                return [Interval(_interval_type[entry['type']], entry['name'], entry['length'])]
+            except KeyError:
+                raise MissingKeyError('Interval in workout file missing a key\n\t{}'.format(entry))
 
     # Set the workout name
     def set_name(self,name):
@@ -159,6 +180,10 @@ class WorkoutState(Enum):
 
 # YAML workout file format error
 class WorkoutFileError(Exception):
+    pass
+
+# Missing key in YAML file error
+class MissingKeyError(Exception):
     pass
 
 # Interval type translation dictionary
