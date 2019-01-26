@@ -43,7 +43,7 @@ class Workout(object):
             try:
                 yaml_dict = yaml.load(stream)
             except yaml.YAMLError:
-                raise yaml.YAMLError('Error in YAML file: {}'.format(yaml_file))
+                raise WorkoutFileError('Invalid YAML in workout file: {}'.format(yaml_file))
 
         # Read workout title
         self.set_name(yaml_dict['title'])
@@ -156,6 +156,10 @@ class WorkoutState(Enum):
     running = auto()
     paused = auto()
     stopped = auto()
+
+# YAML workout file format error
+class WorkoutFileError(Exception):
+    pass
 
 # Interval type translation dictionary
 _interval_type = {'work': IntervalType.work, 'rest': IntervalType.rest, 'warmup': IntervalType.warmup, 'warmdown': IntervalType.warmdown}

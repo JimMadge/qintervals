@@ -1,10 +1,10 @@
 import context
 import pytest
-from qintervals.workout import Workout
+from qintervals.workout import Workout, WorkoutFileError
 import yaml
 
 def test_invalid_yaml():
-    with pytest.raises(yaml.YAMLError):
+    with pytest.raises(WorkoutFileError):
         workout = Workout(yaml_file=context.test_data_dir+'invalid_yaml.yml')
 
 def test_yaml_basic():
