@@ -7,11 +7,11 @@ intervals:
     name: Two
     length: 3s
   - block:
-    repeats: 2
-    intervals:
-      - type: work
-        name: Block One
-        length: 3s
-      - type: work
-        name: Block Two
-        length: 3s
+      repeats: 2
+      intervals:
+        - type: work
+          name: Block One
+          length: 3s
+        - type: work
+          name: Block Two
+          length: 3s

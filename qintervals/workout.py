@@ -58,10 +58,11 @@ class Workout(object):
         # Determine whether argument is a single interval or a block
         if 'block' in entry.keys():
             intervals = []
-            repeats = entry['repeats']
+            block = entry['block']
+            repeats = block['repeats']
             assert isinstance(repeats, int)
             # Unpack intervals or blocks inside this entry recursively
-            for sub_entry in entry['intervals']:
+            for sub_entry in block['intervals']:
                 intervals += self._unpack(sub_entry)
 
             # Return the correct number of repetitions
