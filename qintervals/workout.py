@@ -25,7 +25,9 @@ from .interval import Interval, IntervalType
 from time import time
 import yaml
 
-_Timing = namedtuple("Timing", ['starts_at', 'ends_at'])
+_Timing = namedtuple('Timing', ['starts_at', 'ends_at'])
+_Progress = namedtuple('Progress', ['elapsed', 'remaining', 'interval_elapsed',
+    'interval_remaining', 'interval', 'changed_interval'])
 
 # Work out class
 class Workout(object):
@@ -163,9 +165,12 @@ class Workout(object):
     # the current interval and whether the interval has changed since the last call
     def progress(self):
         elapsed = self.elapsed()
+        # Check for the end of the workout
         if elapsed >= self.total_time:
             self.stop()
-            return 0, self.total_time, 0, self.intervals[0].length, self.intervals[0], True
+            return _Progress(elapsed=0, remaining=self.total_time, 
+                    interval_elapsed=0, interval_remaining=self.intervals[0].length,
+                    interval=self.intervals[0], changed_interval=True)
 
         remaining = self.total_time - elapsed
 
@@ -178,7 +183,9 @@ class Workout(object):
         interval_elapsed = elapsed - self.timings[interval].starts_at
         interval_remaining = interval.length - interval_elapsed
 
-        return elapsed, remaining, interval_elapsed, interval_remaining, interval, changed_interval
+        return _Progress(elapsed=elapsed, remaining=remaining,
+                interval_elapsed=interval_elapsed, interval_remaining=interval_remaining,
+                interval=interval, changed_interval=changed_interval)
 
     # List upcoming intervals
     def upcoming(self):
