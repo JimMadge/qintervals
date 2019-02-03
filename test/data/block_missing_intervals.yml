@@ -8,7 +8,7 @@ intervals:
     length: 3s
   - block:
       repeats: 2
-      intervals:
+      internals:
         - type: work
           name: Block One
           length: 3s

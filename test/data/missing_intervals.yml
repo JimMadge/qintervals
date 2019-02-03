@@ -1,0 +1,14 @@
+title: Basic Test
+interval:
+  - type: warmup
+    name: One
+    length: 3s
+  - type: work
+    name: Two
+    length: 3s
+  - type: rest
+    name: Three
+    length: 3s
+  - type: warmdown
+    name: Four
+    length: 3s

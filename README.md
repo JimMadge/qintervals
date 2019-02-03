@@ -59,14 +59,14 @@ intervals:
     length: 5m
 
   - block:
-    repeats: 2
-    intervals:
-      - type: work
-        name: Zone 4, low
-        length: 5m
-      - type: rest
-        name: Rest
-        length: 60s
+      repeats: 2
+      intervals:
+        - type: work
+          name: Zone 4, low
+          length: 5m
+        - type: rest
+          name: Rest
+          length: 60s
 
 ...
 ```

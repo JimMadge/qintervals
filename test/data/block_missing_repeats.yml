@@ -7,7 +7,7 @@ intervals:
     name: Two
     length: 3s
   - block:
-      repeats: 2
+      rounds: 2
       intervals:
         - type: work
           name: Block One

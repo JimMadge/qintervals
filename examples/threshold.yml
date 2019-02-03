@@ -13,42 +13,42 @@ intervals:
     length: 5m
 
   - block:
-    repeats: 2
-    intervals:
-      - type: work
-        name: Zone 4, low
-        length: 5m
-      - type: rest
-        name: Rest
-        length: 60s
+      repeats: 2
+      intervals:
+        - type: work
+          name: Zone 4, low
+          length: 5m
+        - type: rest
+          name: Rest
+          length: 60s
 
   - type: rest
     name: Rest
     length: 5m
 
   - block:
-    repeats: 3
-    intervals :
-      - type: work
-        name: Zone 4, high
-        length: 2m
-      - type: rest
-        name: Rest
-        length: 30s
+      repeats: 3
+      intervals :
+        - type: work
+          name: Zone 4, high
+          length: 2m
+        - type: rest
+          name: Rest
+          length: 30s
 
   - type: rest
     name: Rest
     length: 5m
 
   - block:
-    repeats: 6
-    intervals:
-      - type: work
-        name: Zone 5
-        length: 1m
-      - type: rest
-        name: Rest
-        length: 30s
+      repeats: 6
+      intervals:
+        - type: work
+          name: Zone 5
+          length: 1m
+        - type: rest
+          name: Rest
+          length: 30s
 
   - type: warmdown
     name: Warm down
