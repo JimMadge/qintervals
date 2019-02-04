@@ -1,0 +1,11 @@
+title: Quick
+intervals:
+  - type: work
+    name: One
+    length: 0.01s
+  - type: work
+    name: Two
+    length: 0.01s
+  - type: work
+    name: Three
+    length: 0.01s
