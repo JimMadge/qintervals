@@ -26,7 +26,8 @@ class Interval(object):
         if interval_type in IntervalType:
             self.interval_type = interval_type
         else:
-            raise IntervalTypeError('Invalid interval type provided {}'.format(interval_type))
+            raise IntervalTypeError(
+                'Invalid interval type provided {}'.format(interval_type))
 
         if isinstance(text, str):
             self.text = text
@@ -42,7 +43,9 @@ class Interval(object):
         elif time_unit == 'm':
             self.length = float(length[:-1]) * 60.0
         else:
-            raise TimeUnitError('Length of interval must be given in minutes(m) or seconds(s). Given unit was {}'.format(time_unit))
+            raise TimeUnitError(
+                'Length of interval must be given in minutes(m)' +\
+                ' or seconds(s). Given unit was {}'.format(time_unit))
 
 # Interval type enum
 class IntervalType(Enum):
