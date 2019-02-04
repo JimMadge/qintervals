@@ -46,6 +46,8 @@ class Workout(object):
 
         if yaml_file:
             self.from_yaml(yaml_file)
+            # Initialise last interval
+            self._last_interval = self.intervals[0]
 
     # Parse a yaml file to read a workout
     def from_yaml(self, yaml_file):
@@ -73,9 +75,6 @@ class Workout(object):
         for entry in entries:
             for interval in self._unpack(entry):
                 self.add_interval(interval)
-
-        # Initialise last interval
-        self._last_interval = self.intervals[0]
 
     # Unpack a single interval or block into a list of interval objects
     def _unpack(self, entry):
