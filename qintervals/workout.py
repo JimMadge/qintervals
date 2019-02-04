@@ -25,11 +25,13 @@ from .interval import Interval, IntervalType
 from time import time
 import yaml
 
+# Container for interval starting and ending times
 _Timing = namedtuple('Timing', ['starts_at', 'ends_at'])
+# Container for returning workout progress information
 _Progress = namedtuple('Progress', ['elapsed', 'remaining', 'interval_elapsed',
     'interval_remaining', 'interval', 'changed_interval'])
 
-# Work out class
+# A collection of intervals and methods for timing a workout
 class Workout(object):
     def __init__(self, yaml_file=None):
         self.intervals = []
@@ -38,10 +40,14 @@ class Workout(object):
         self.time_paused = 0
         self.state = WorkoutState.stopped
 
+        # Marker for last known interval, used for determining when the
+        # current interval has changed
         self._last_interval = None
 
         if yaml_file:
             self.from_yaml(yaml_file)
+            # Initialise last interval
+            self._last_interval = self.intervals[0]
 
     # Parse a yaml file to read a workout
     def from_yaml(self, yaml_file):
@@ -50,7 +56,8 @@ class Workout(object):
             try:
                 yaml_dict = yaml.load(stream)
             except yaml.YAMLError:
-                raise WorkoutFileError('Invalid YAML in workout file: {}'.format(yaml_file))
+                raise WorkoutFileError(
+                    'Invalid YAML in workout file: {}'.format(yaml_file))
 
         # Read workout title
         try:
@@ -69,9 +76,6 @@ class Workout(object):
             for interval in self._unpack(entry):
                 self.add_interval(interval)
 
-        # Initialise last interval
-        self._last_interval = self.intervals[0]
-
     # Unpack a single interval or block into a list of interval objects
     def _unpack(self, entry):
         # Determine whether argument is a single interval or a block
@@ -82,13 +86,17 @@ class Workout(object):
                 repeats = block['repeats']
                 assert isinstance(repeats, int)
             except KeyError:
-                raise MissingKeyError('Block in workout file missing key: "repeats"\n\t{}'.format(entry))
+                raise MissingKeyError(
+                    'Block in workout file missing key:' +\
+                    ' "repeats"\n\t{}'.format(entry))
 
             # Unpack intervals or blocks inside this entry recursively
             try:
                 sub_entries = block['intervals']
             except KeyError:
-                raise MissingKeyError('Block in workout file missing key: "intervals"\n\t{}'.format(entry))
+                raise MissingKeyError(
+                    'Block in workout file missing key:' +\
+                    ' "intervals"\n\t{}'.format(entry))
 
             for sub_entry in block['intervals']:
                 intervals += self._unpack(sub_entry)
@@ -98,15 +106,20 @@ class Workout(object):
         else:
             # Return single interval
             try:
-                return [Interval(_interval_type[entry['type']], entry['name'], entry['length'])]
+                return [
+                    Interval(_interval_type[entry['type']],
+                    entry['name'], entry['length'])]
             except KeyError:
-                raise MissingKeyError('Interval in workout file missing a key\n\t{}'.format(entry))
+                raise MissingKeyError(
+                    'Interval in workout file missing a key' +\
+                    '\n\t{}'.format(entry))
 
     # Add an interval to the end of the list and update timings
     def add_interval(self, interval):
         self.intervals.append(interval)
-        self.timings[interval] = _Timing(starts_at=self.total_time,
-                ends_at=self.total_time+interval.length)
+        self.timings[interval] = _Timing(
+            starts_at=self.total_time,
+            ends_at=self.total_time+interval.length)
         self.total_time += interval.length
 
     # Start the workout timer
@@ -161,16 +174,20 @@ class Workout(object):
                 if elapsed < ends_at:
                     return interval
 
-    # Determine the total time elapsed and remaining, current interval time elapsed and remaining,
-    # the current interval and whether the interval has changed since the last call
+    # Return a summary of the progress of the workout
+    # Returned values are the total time elapsed and remaining,
+    # current interval time elapsed and remaining, the current interval
+    # and whether the interval has changed since the last call
     def progress(self):
         elapsed = self.elapsed()
         # Check for the end of the workout
         if elapsed >= self.total_time:
             self.stop()
-            return _Progress(elapsed=0, remaining=self.total_time, 
-                    interval_elapsed=0, interval_remaining=self.intervals[0].length,
-                    interval=self.intervals[0], changed_interval=True)
+            return _Progress(
+                elapsed=0, remaining=self.total_time,
+                interval_elapsed=0,
+                interval_remaining=self.intervals[0].length,
+                interval=self.intervals[0], changed_interval=True)
 
         remaining = self.total_time - elapsed
 
@@ -183,9 +200,11 @@ class Workout(object):
         interval_elapsed = elapsed - self.timings[interval].starts_at
         interval_remaining = interval.length - interval_elapsed
 
-        return _Progress(elapsed=elapsed, remaining=remaining,
-                interval_elapsed=interval_elapsed, interval_remaining=interval_remaining,
-                interval=interval, changed_interval=changed_interval)
+        return _Progress(
+            elapsed=elapsed, remaining=remaining,
+            interval_elapsed=interval_elapsed,
+            interval_remaining=interval_remaining,
+            interval=interval, changed_interval=changed_interval)
 
     # List upcoming intervals
     def upcoming(self):
@@ -193,7 +212,7 @@ class Workout(object):
         index = self.intervals.index(self.current_interval())
         return  self.intervals[index+1:]
 
-# Workout state enum
+# Workout states
 class WorkoutState(Enum):
     running = auto()
     paused = auto()
@@ -208,4 +227,8 @@ class MissingKeyError(Exception):
     pass
 
 # Interval type translation dictionary
-_interval_type = {'work': IntervalType.work, 'rest': IntervalType.rest, 'warmup': IntervalType.warmup, 'warmdown': IntervalType.warmdown}
+_interval_type = {
+    'work': IntervalType.work,
+    'rest': IntervalType.rest,
+    'warmup': IntervalType.warmup,
+    'warmdown': IntervalType.warmdown}
