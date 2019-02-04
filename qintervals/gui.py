@@ -135,6 +135,8 @@ class Ui(QtWidgets.QWidget):
         self.count_down.update_times(elapsed,remaining,interval_elapsed,interval_remaining)
         self.count_down.repaint()
 
+        self.buttons.update_buttons()
+
         if changed_interval:
             # Play sound if interval has changed
             self.bell.play()
