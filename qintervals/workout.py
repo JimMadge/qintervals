@@ -29,7 +29,9 @@ import yaml
 _Timing = namedtuple('Timing', ['starts_at', 'ends_at'])
 # Container for returning workout progress information
 _Progress = namedtuple('Progress', ['elapsed', 'remaining', 'interval_elapsed',
-    'interval_remaining', 'interval', 'changed_interval'])
+                                    'interval_remaining', 'interval',
+                                    'changed_interval'])
+
 
 # A collection of intervals and methods for timing a workout
 class Workout(object):
@@ -87,7 +89,7 @@ class Workout(object):
                 assert isinstance(repeats, int)
             except KeyError:
                 raise MissingKeyError(
-                    'Block in workout file missing key:' +\
+                    'Block in workout file missing key:' +
                     ' "repeats"\n\t{}'.format(entry))
 
             # Unpack intervals or blocks inside this entry recursively
@@ -95,10 +97,10 @@ class Workout(object):
                 sub_entries = block['intervals']
             except KeyError:
                 raise MissingKeyError(
-                    'Block in workout file missing key:' +\
+                    'Block in workout file missing key:' +
                     ' "intervals"\n\t{}'.format(entry))
 
-            for sub_entry in block['intervals']:
+            for sub_entry in sub_entries:
                 intervals += self._unpack(sub_entry)
 
             # Return the correct number of repetitions
@@ -108,10 +110,11 @@ class Workout(object):
             try:
                 return [
                     Interval(_interval_type[entry['type']],
-                    entry['name'], entry['length'])]
+                             entry['name'], entry['length'])
+                    ]
             except KeyError:
                 raise MissingKeyError(
-                    'Interval in workout file missing a key' +\
+                    'Interval in workout file missing a key' +
                     '\n\t{}'.format(entry))
 
     # Add an interval to the end of the list and update timings
@@ -208,9 +211,9 @@ class Workout(object):
 
     # List upcoming intervals
     def upcoming(self):
-        elapsed = self.elapsed()
         index = self.intervals.index(self.current_interval())
-        return  self.intervals[index+1:]
+        return self.intervals[index+1:]
+
 
 # Workout states
 class WorkoutState(Enum):
@@ -218,13 +221,16 @@ class WorkoutState(Enum):
     paused = auto()
     stopped = auto()
 
+
 # YAML workout file format error
 class WorkoutFileError(Exception):
     pass
 
+
 # Missing key in YAML file error
 class MissingKeyError(Exception):
     pass
+
 
 # Interval type translation dictionary
 _interval_type = {

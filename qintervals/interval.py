@@ -20,6 +20,7 @@
 #
 from enum import Enum, auto
 
+
 # Interval class
 class Interval(object):
     def __init__(self, interval_type, text, length):
@@ -44,8 +45,9 @@ class Interval(object):
             self.length = float(length[:-1]) * 60.0
         else:
             raise TimeUnitError(
-                'Length of interval must be given in minutes(m)' +\
+                'Length of interval must be given in minutes(m)' +
                 ' or seconds(s). Given unit was {}'.format(time_unit))
+
 
 # Interval type enum
 class IntervalType(Enum):
@@ -54,9 +56,11 @@ class IntervalType(Enum):
     warmup = auto()
     warmdown = auto()
 
+
 # Incorrect time unit exception
 class TimeUnitError(Exception):
     pass
+
 
 # Invalid interval type exception
 class IntervalTypeError(Exception):
