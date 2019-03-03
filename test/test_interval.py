@@ -1,18 +1,23 @@
 import context
 from pytest import raises
-from qintervals.interval import Interval, IntervalType, TimeUnitError, IntervalTypeError
+from qintervals.interval import (Interval, IntervalType, TimeUnitError,
+                                 IntervalTypeError)
+
 
 def test_time_unit_error():
     with raises(TimeUnitError):
-        interval = Interval(IntervalType.work, 'test', '100f')
+        Interval(IntervalType.work, 'test', '100f')
+
 
 def test_invalid_interval_type_error():
     with raises(IntervalTypeError):
-        interval = Interval(70.5, 'test', '100s')
+        Interval(70.5, 'test', '100s')
+
 
 def test_invalid_text():
     with raises(TypeError):
-        interval = Interval(IntervalType.work, 54, '100s')
+        Interval(IntervalType.work, 54, '100s')
+
 
 def test_time_unit_conversion():
     interval = Interval(IntervalType.work, 'test', '1m')

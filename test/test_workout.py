@@ -4,8 +4,11 @@ from qintervals.workout import Workout, WorkoutState
 from time import sleep
 
 TOLERANCE = 1e-3
+
+
 def approx_time(value):
     return approx(value, abs=TOLERANCE)
+
 
 def test_start():
     workout = Workout(yaml_file=context.test_data_dir+'basic.yml')
@@ -14,6 +17,7 @@ def test_start():
 
     assert workout.current_interval() == workout.intervals[0]
     assert workout.elapsed() == approx_time(0.01)
+
 
 def test_transition():
     workout = Workout(yaml_file=context.test_data_dir+'quick.yml')
@@ -25,14 +29,16 @@ def test_transition():
     assert workout.current_interval() == workout.intervals[1]
     assert progress.changed_interval
 
+
 def test_ending():
     workout = Workout(yaml_file=context.test_data_dir+'quick.yml')
     workout.start()
     sleep(0.03)
 
-    progress = workout.progress()
+    workout.progress()
 
     assert workout.state == WorkoutState.stopped
+
 
 def test_pause():
     workout = Workout(yaml_file=context.test_data_dir+'basic.yml')
@@ -44,6 +50,7 @@ def test_pause():
     assert workout.state == WorkoutState.paused
     assert workout.elapsed() == approx_time(0.01)
 
+
 def test_resume():
     workout = Workout(yaml_file=context.test_data_dir+'basic.yml')
     workout.start()
@@ -54,6 +61,7 @@ def test_resume():
 
     assert workout.time_paused == approx_time(0.01)
     assert workout.state == WorkoutState.running
+
 
 def test_start_pause():
     workout = Workout(yaml_file=context.test_data_dir+'basic.yml')
@@ -70,6 +78,7 @@ def test_start_pause():
     assert workout.time_paused == approx_time(0.01)
     assert workout.state == WorkoutState.running
 
+
 def test_progress():
     workout = Workout(yaml_file=context.test_data_dir+'quick.yml')
     workout.start()
@@ -82,11 +91,12 @@ def test_progress():
     assert progress.interval_elapsed == approx_time(0.)
     assert progress.interval_remaining == approx_time(0.01)
     assert progress.interval == workout.intervals[1]
-    assert progress.changed_interval == True
+    assert progress.changed_interval is True
 
     progress = workout.progress()
 
-    assert progress.changed_interval == False
+    assert progress.changed_interval is False
+
 
 def test_upcoming():
     workout = Workout(yaml_file=context.test_data_dir+'quick.yml')
