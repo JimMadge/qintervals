@@ -34,7 +34,7 @@ _COLOUR_BLUE = QtGui.QColor(55, 126, 184)
 _COLOUR_GREEN = QtGui.QColor(77, 175, 74)
 
 
-class Ui(QtWidgets.QWidget):
+class Ui(QtWidgets.QMainWindow):
     def __init__(self, workout):
         super().__init__()
         self.init_fonts()
