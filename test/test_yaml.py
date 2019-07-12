@@ -1,34 +1,33 @@
-import context
-from pytest import raises
+import pytest
 from qintervals.workout import Workout, WorkoutFileError, MissingKeyError
 
 
-def test_invalid_yaml():
-    with raises(WorkoutFileError):
-        Workout(yaml_file=context.test_data_dir+'invalid_yaml.yml')
+def test_invalid_yaml(test_data):
+    with pytest.raises(WorkoutFileError):
+        Workout(yaml_file=test_data+'/invalid_yaml.yml')
 
 
-def test_yaml_basic():
+def test_yaml_basic(test_data):
     n_intervals = 4
     names = ['One', 'Two', 'Three', 'Four']
-    workout = Workout(yaml_file=context.test_data_dir+'basic.yml')
+    workout = Workout(yaml_file=test_data+'/basic.yml')
     interval_names = [interval.text for interval in workout.intervals]
 
     assert len(workout.intervals) == n_intervals
     assert interval_names == names
 
 
-def test_yaml_block():
+def test_yaml_block(test_data):
     n_intervals = 6
     names = ['One', 'Two'] + ['Block One', 'Block Two']*2
-    workout = Workout(yaml_file=context.test_data_dir+'block.yml')
+    workout = Workout(yaml_file=test_data+'/block.yml')
     interval_names = [interval.text for interval in workout.intervals]
 
     assert len(workout.intervals) == n_intervals
     assert interval_names == names
 
 
-def test_yaml_nested_blocks():
+def test_yaml_nested_blocks(test_data):
     n_intervals = 12
     names = (
         ['One', 'Two']
@@ -37,7 +36,7 @@ def test_yaml_nested_blocks():
             + ['Nested Block One', 'Nested Block Two']*2
         )*2
     )
-    workout = Workout(yaml_file=context.test_data_dir+'nested_blocks.yml')
+    workout = Workout(yaml_file=test_data+'/nested_blocks.yml')
     interval_names = [interval.text for interval in workout.intervals]
 
     assert len(workout.intervals) == n_intervals
@@ -45,24 +44,22 @@ def test_yaml_nested_blocks():
 
 
 class TestMissingKeyError(object):
-    def test_missing_title_key(self):
-        with raises(MissingKeyError):
-            Workout(yaml_file=context.test_data_dir+'missing_title.yml')
+    def test_missing_title_key(self, test_data):
+        with pytest.raises(MissingKeyError):
+            Workout(yaml_file=test_data+'/missing_title.yml')
 
-    def test_missing_intervals(self):
-        with raises(MissingKeyError):
-            Workout(yaml_file=context.test_data_dir+'missing_intervals.yml')
+    def test_missing_intervals(self, test_data):
+        with pytest.raises(MissingKeyError):
+            Workout(yaml_file=test_data+'/missing_intervals.yml')
 
-    def test_missing_interval_key(self):
-        with raises(MissingKeyError):
-            Workout(yaml_file=context.test_data_dir+'missing_interval_key.yml')
+    def test_missing_interval_key(self, test_data):
+        with pytest.raises(MissingKeyError):
+            Workout(yaml_file=test_data+'/missing_interval_key.yml')
 
-    def test_block_missing_repeats(self):
-        with raises(MissingKeyError):
-            Workout(yaml_file=context.test_data_dir
-                    + 'block_missing_repeats.yml')
+    def test_block_missing_repeats(self, test_data):
+        with pytest.raises(MissingKeyError):
+            Workout(yaml_file=test_data+'/block_missing_repeats.yml')
 
-    def test_block_missing_intervals(self):
-        with raises(MissingKeyError):
-            Workout(yaml_file=context.test_data_dir
-                    + 'block_missing_intervals.yml')
+    def test_block_missing_intervals(self, test_data):
+        with pytest.raises(MissingKeyError):
+            Workout(yaml_file=test_data+'/block_missing_intervals.yml')

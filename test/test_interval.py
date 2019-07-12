@@ -1,4 +1,3 @@
-import context
 from pytest import raises
 from qintervals.interval import (Interval, IntervalType, TimeUnitError,
                                  IntervalTypeError)
