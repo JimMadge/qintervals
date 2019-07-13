@@ -56,7 +56,7 @@ class Workout(object):
         # Parse yaml file as a dictionary
         with open(yaml_file, 'rb') as stream:
             try:
-                yaml_dict = yaml.load(stream)
+                yaml_dict = yaml.load(stream, Loader=yaml.SafeLoader)
             except yaml.YAMLError:
                 raise WorkoutFileError(
                     'Invalid YAML in workout file: {}'.format(yaml_file))

@@ -1,3 +1,4 @@
+from enum import Enum, auto
 from pytest import raises
 from qintervals.interval import (Interval, IntervalType, TimeUnitError,
                                  IntervalTypeError)
@@ -9,8 +10,11 @@ def test_time_unit_error():
 
 
 def test_invalid_interval_type_error():
+    class InvalidIntervalType(Enum):
+        test = auto()
+
     with raises(IntervalTypeError):
-        Interval(70.5, 'test', '100s')
+        Interval(InvalidIntervalType.test, 'test', '100s')
 
 
 def test_invalid_text():
