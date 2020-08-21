@@ -4,49 +4,69 @@
 
 An interval training program written in Python with a Qt GUI.
 
-## Requirements
-
-- Python3
-- Qt5
-- setuptools
-- PyQt5
-- PyYAML
-
 ## Installation
+### User Installation with pip
 
-Clone the repository and change into the root directory, then run `pip3 install --user .`
+To use qintervals you will need to ensure you have Qt5 installed
+
+Clone the repository
+
+```
+$ git clone https://github.com/JimMadge/qintervals.git
+```
+
+Install using pip
+```
+$ cd qintervals
+$ pip3 install --user .
+````
+
+`qintervals` will be installed to `~/.local/bin` so ensure this directory is in
+your `$PATH`.
 
 ## Usage
 
-After installation the command `qintervals` should be installed to your local path (_i.e._ `~/.local/bin/`). The program takes a single positional argument, which is the path to the YAML workout file you want to use. An example is included in the examples directory.
+`qintervals` takes a single positional argument, the path to a YAML workout
+file. Example workout files may be found in the [examples](./examples) directory.
 
-`qintervals qintervals/examples/threshold.yml`
+To run one of the examples
+
+```
+$ qintervals qintervals/examples/threshold.yml
+```
 
 ## Workout File Format
 
-The workout files are written in yaml with the following keys,
+A workout is a series of intervals, or blocks (groups of repeated intervals).
 
-- `title` - the title of the workout
-- `intervals` - the ordered list of intervals or blocks in the workout
+Workout files are written in [YAML](https://yaml.org/). There are two top-level
+keys
 
-The value of workout is a mixed list of intervals or blocks (with key `block`).
+| key         | description                                            |
+| ---         | ---                                                    |
+| `title`     | title of the workout                                   |
+| `intervals` | ordered list of `interval`s or `block`s in the workout |
 
-Each interval has the following keys,
+Each interval has the following keys
 
-- `type` - the type of interval, which can take the values warmup, warmdown, work and rest
-- `name` - a label for the interval that is displayed by the program, which can be used to give instructions
-- `length` - the length of the interval given as a number immediately followed by 's' for seconds and 'm' for minutes _e.g._ '30s' or '5m'
+| key      | description                                                                               |
+| ---      | ---                                                                                       |
+| `type`   | type of interval, one of `warmup`, `warmdown`, `work` or `rest`                           |
+| `name`   | interval label that is displayed by the program, can be used to give instructions         |
+| `length` | length of the interval given as a whole number of minutes or seconds _e.g._ `30s` or `5m` |
 
-A block is a collection of intervals (or other blocks) that are repeated. A
-block has the following keys,
+A block has the following keys
 
-- `repeats` - the number of times to repeat a block
-- `intervals` - the ordered list of intervals or blocks to be repeated
-- `skip_last_rest` - whether to skip the last interval of a block if it is a
-  rest (useful when a block is followed by a rest interval and you want to avoid
-  having two rest intervals in a row)
+| key              | description                              |
+| ---              | ---                                      |
+| `repeats`        | number of times to repeat a block        |
+| `intervals`      | ordered list of intervals or blocks      |
+| `skip_last_rest` | skip the last interval if it is a rest*  |
+
+(*useful when a block is followed by a rest interval and you want to avoid having two rest intervals in a row)
 
 For example
+
 ```yaml
 title: Threshold
 intervals:
