@@ -342,13 +342,3 @@ class UpcomingIntervals(QtWidgets.QWidget):
         # than the number of intervals remaining
         for label in self.label_upcoming_intervals[len(upcoming):]:
             label.setText('')
-
-
-def parse_args():
-    parser = argparse.ArgumentParser(prog='qintervals',
-                                     description='Interval training timer')
-    parser.add_argument('workout', type=str, action='store',
-                        help='YAML workout file to read')
-
-    clargs = parser.parse_args()
-    return clargs
