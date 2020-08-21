@@ -41,6 +41,9 @@ block has the following keys,
 
 - `repeats` - the number of times to repeat a block
 - `intervals` - the ordered list of intervals or blocks to be repeated
+- `skip_last_rest` - whether to skip the last interval of a block if it is a
+  rest (useful when a block is followed by a rest interval and you want to avoid
+  having two rest intervals in a row)
 
 For example
 ```yaml
@@ -60,6 +63,7 @@ intervals:
 
   - block:
       repeats: 2
+      skip_last_rest: true
       intervals:
         - type: work
           name: Zone 4, low

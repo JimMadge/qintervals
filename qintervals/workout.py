@@ -104,7 +104,15 @@ class Workout(object):
                 intervals += self._unpack(sub_entry)
 
             # Return the correct number of repetitions
-            return [copy(interval) for interval in intervals*repeats]
+            intervals = [copy(interval) for interval in intervals*repeats]
+            try:
+                if block["skip_last_rest"]:
+                    if intervals[-1].interval_type is IntervalType.rest:
+                        intervals = intervals[:-1]
+            except KeyError:
+                pass
+
+            return intervals
         else:
             # Return single interval
             try:
