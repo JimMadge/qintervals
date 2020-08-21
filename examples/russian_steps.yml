@@ -1,0 +1,63 @@
+---
+title: Russian Steps
+intervals:
+  - type: warmup
+    name: Warm up
+    length: 10m
+
+  - block:
+      repeats: 3
+      skip_last_rest: true
+      intervals:
+        - type: work
+          name: Full
+          length: 15s
+        - type: rest
+          name: Rest
+          length: 45s
+
+        - type: work
+          name: Full
+          length: 30s
+        - type: rest
+          name: Rest
+          length: 30s
+
+        - type: work
+          name: Full
+          length: 45s
+        - type: rest
+          name: Rest
+          length: 15s
+
+        - type: work
+          name: Full
+          length: 1m
+        - type: rest
+          name: Rest
+          length: 1m
+
+        - type: work
+          name: Full
+          length: 45s
+        - type: rest
+          name: Rest
+          length: 15s
+
+        - type: work
+          name: Full
+          length: 30s
+        - type: rest
+          name: Rest
+          length: 30s
+
+        - type: work
+          name: Full
+          length: 15s
+        - type: rest
+          name: Rest
+          length: 5m
+
+  - type: warmdown
+    name: Warm down
+    length: 10m

@@ -1,28 +1,7 @@
-#  This file is part of qintervals.
-#
-#  Copyright 2018 Jim Madge <jmmadge@gmail.com>
-#
-#  qintervals is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 3 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-#  MA 02110-1301, USA.
-#
-#
 from .workout import WorkoutState
 from PyQt5 import QtCore, QtGui, QtWidgets, QtMultimedia
 from os import path
 from math import sin, pi
-import argparse
 
 _WIDTH = 700
 _HEIGHT = 500
@@ -227,8 +206,11 @@ class Buttons(QtWidgets.QWidget):
         self.hbox = QtWidgets.QHBoxLayout(self)
         self.hbox.setContentsMargins(0, 0, 0, 0)
 
+        button_size = QtCore.QSize(150, 50)
+
         # Create start/pause button
         self.button_start_pause = QtWidgets.QPushButton('Start', self)
+        self.button_start_pause.setFixedSize(button_size)
         self.button_start_pause.setFont(font_default)
         self.button_start_pause.clicked.connect(
             self.parentWidget().start_pause)
@@ -236,9 +218,11 @@ class Buttons(QtWidgets.QWidget):
 
         # Create stop button
         self.button_stop = QtWidgets.QPushButton('Stop', self)
+        self.button_stop.setFixedSize(button_size)
         self.button_stop.setFont(font_default)
         self.button_stop.clicked.connect(self.parentWidget().stop)
         self.hbox.addWidget(self.button_stop, QtCore.Qt.AlignCenter)
+
         self.update_buttons()
 
     # Write the appropriate button labels and activate/deactivate as necessary
@@ -362,13 +346,3 @@ class UpcomingIntervals(QtWidgets.QWidget):
         # than the number of intervals remaining
         for label in self.label_upcoming_intervals[len(upcoming):]:
             label.setText('')
-
-
-def parse_args():
-    parser = argparse.ArgumentParser(prog='qintervals',
-                                     description='Interval training timer')
-    parser.add_argument('workout', type=str, action='store',
-                        help='YAML workout file to read')
-
-    clargs = parser.parse_args()
-    return clargs

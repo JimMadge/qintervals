@@ -1,23 +1,3 @@
-#  This file is part of qintervals.
-#
-#  Copyright 2018 Jim Madge <jmmadge@gmail.com>
-#
-#  qintervals is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 3 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-#  MA 02110-1301, USA.
-#
-#
 from collections import namedtuple
 from copy import copy
 from enum import Enum, auto
@@ -104,7 +84,15 @@ class Workout(object):
                 intervals += self._unpack(sub_entry)
 
             # Return the correct number of repetitions
-            return [copy(interval) for interval in intervals*repeats]
+            intervals = [copy(interval) for interval in intervals*repeats]
+            try:
+                if block["skip_last_rest"]:
+                    if intervals[-1].interval_type is IntervalType.rest:
+                        intervals = intervals[:-1]
+            except KeyError:
+                pass
+
+            return intervals
         else:
             # Return single interval
             try:
