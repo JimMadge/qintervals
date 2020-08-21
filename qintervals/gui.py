@@ -206,8 +206,11 @@ class Buttons(QtWidgets.QWidget):
         self.hbox = QtWidgets.QHBoxLayout(self)
         self.hbox.setContentsMargins(0, 0, 0, 0)
 
+        button_size = QtCore.QSize(150, 50)
+
         # Create start/pause button
         self.button_start_pause = QtWidgets.QPushButton('Start', self)
+        self.button_start_pause.setFixedSize(button_size)
         self.button_start_pause.setFont(font_default)
         self.button_start_pause.clicked.connect(
             self.parentWidget().start_pause)
@@ -215,9 +218,11 @@ class Buttons(QtWidgets.QWidget):
 
         # Create stop button
         self.button_stop = QtWidgets.QPushButton('Stop', self)
+        self.button_stop.setFixedSize(button_size)
         self.button_stop.setFont(font_default)
         self.button_stop.clicked.connect(self.parentWidget().stop)
         self.hbox.addWidget(self.button_stop, QtCore.Qt.AlignCenter)
+
         self.update_buttons()
 
     # Write the appropriate button labels and activate/deactivate as necessary
