@@ -1,7 +1,8 @@
-[![Build Status](https://travis-ci.org/JimMadge/qintervals.svg?branch=master)](https://travis-ci.org/JimMadge/qintervals)
 # qintervals
+[![Build Status](https://travis-ci.org/JimMadge/qintervals.svg?branch=master)](https://travis-ci.org/JimMadge/qintervals)
+[![codecov](https://codecov.io/gh/JimMadge/qintervals/branch/master/graph/badge.svg)](https://codecov.io/gh/JimMadge/qintervals)
 
-An interval training program written in python with a Qt GUI.
+An interval training program written in Python with a Qt GUI.
 
 ## Requirements
 
