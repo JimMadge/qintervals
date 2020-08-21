@@ -2,7 +2,6 @@ from .workout import WorkoutState
 from PyQt5 import QtCore, QtGui, QtWidgets, QtMultimedia
 from os import path
 from math import sin, pi
-import argparse
 
 _WIDTH = 700
 _HEIGHT = 500
